@@ -322,19 +322,14 @@ class views_views_plugin_style_timeline extends views_plugin_style {
             // do we really want to link it everytime? -fd
             $event = array('link' => url('node/'. $row->nid), 'description' => '');
             $event['title'] = $row->{$field['alias']};
-            // fill event with dates
-            foreach(array('start', 'end', 'earliestStart', 'latestEnd') as $event_field) {
-              $field = $this->_get_defined_field($event_field);
-              if(isset($row->{$field['alias']})) {
-                $event[$event_field] = timeline_date_conversion($row->{$field['alias']}, $field['date_format']);
-              }
-            }
-            // Prevent bad data from taking out the timeline.
-            /* DEPRECATED (needs other date format than rc2822)
-            if (isset($event['end']) && $event['start'] >= $event['end']) {
-               unset($event['end']);
-            }
-*/
+
+            // fill event with dates            
+            $events_validated = $this->_timeline_event_logic($row);
+            $event['start'] = $events_validated['start']['formated'];  
+            if(isset($events_validated['end']['formated'])) $event['end'] = $events_validated['end']['formated'];
+            if(isset($events_validated['latestEnd']['formated'])) $event['latestEnd'] = $events_validated['latestEnd']['formated'];
+            if(isset($events_validated['earliestStart']['formated'])) $event['earliestStart'] = $events_validated['earliestStart']['formated'];
+            
             // i don't think that this is correct -fd
             foreach ($this->view->display_handler->handlers['field'] as $key => $field) {
               if ($field->options['exclude'] != 1) {
@@ -347,6 +342,8 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       }
       // return a json string
       return array(
+        'wikiURL' => '',
+        'wikiSection' => '',
         'dateTimeFormat' => 'rfc2822',
         'events' => $bands,
       );
@@ -424,4 +421,47 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     }
     return FALSE;
   }
+  
+  
+  /**
+   * This function validates the dates of one event that have a relation. Like start and end date.
+   * 
+   * @return
+   *   $event: Array with the converted date and a unix timestamp on which some logic has been done
+   */
+  function _timeline_event_logic($row) {
+
+  $event = array();
+    foreach(array('start', 'end', 'earliestStart', 'latestEnd') as $event_field) {
+      $field = $this->_get_defined_field($event_field);
+      
+      if(isset($row->{$field['alias']})) {
+        $event[$event_field]['formated'] = timeline_date_conversion($row->{$field['alias']}, $field['date_format']);
+        $event[$event_field]['timestamp'] = timeline_date_conversion($row->{$field['alias']}, $field['date_format'], 'timestamp');
+      }
+    }
+
+    // Validate date values
+    if(isset($event['earliestStart']) && $event['start']['timestamp'] <= $event['earliestStart']['timestamp']) {
+      unset($event['earliestStart']);
+    }
+  
+    if(isset($event['end']) && $event['end']['timestamp'] <= $event['start']['timestamp']) {
+      unset($event['end']);
+    }
+  
+    if(isset($event['latestEnd']) && $event['lastestEnd']['timestamp'] <= $event['start']['timestamp']) {
+      unset($event['latestEnd']);
+    }
+     
+    if(!isset($event['end'])) {
+   	  $event['durationEvent']['value'] = TRUE;
+    }
+    else {
+      $event['durationEvent']['value'] = FALSE;
+    }
+    dsm($event);
+    return $event;
+  }
 }
+

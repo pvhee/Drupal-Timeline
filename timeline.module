@@ -126,13 +126,17 @@ function timeline_admin_settings() {
  *   date in defined output
  */ 
 function timeline_date_conversion($date, $input_format, $output_format = "Y-m-d\TH:i:s") {
+  
   switch($input_format) {
   	case 'date':
+  	  if ($output_format == 'timestamp') return date_convert($date, DATE_ISO, DATE_UNIX);
   	  return format_date(date_convert($date, DATE_ISO, DATE_UNIX), 'timestamp', $output_format);
   	case 'datetime':
+  	  if ($output_format == 'timestamp') return date_convert($date, DATE_DATETIME, DATE_UNIX);
   	  return format_date(date_convert($date, DATE_DATETIME, DATE_UNIX), 'timestamp', $output_format);
   	case 'datestamp':
   	case 'timestamp':
+  	  if ($output_format == 'timestamp') return $date;
       return format_date($date, 'timestamp', $output_format);
   }  	
 }
