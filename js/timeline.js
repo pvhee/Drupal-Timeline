@@ -1,13 +1,8 @@
-
-
-
-
 Drupal.timeline = {	
   timerID: null,
 
   getTheme: function(theme_name, timeline_start, timeline_end, bubble_height, bubble_width) {
     var theme = Timeline.ClassicTheme.create();
-    var test = 900;
     //theme.event.label.width = parseInt(bubble_width); // px
     theme.event.bubble.width = parseInt(bubble_width);
     theme.event.bubble.maxHeight = parseInt(bubble_height);
@@ -75,8 +70,8 @@ Drupal.timeline = {
    var timeline = Timeline.create(document.getElementById(args.id), bandInfos);
    var url = document.location.href;
    //timeline_sets = eval("(" + timeline_sets + ")");
-   $.each(args.timeline_sets.events, function(i, v) {
-          Sources[i].loadJSON(args.timeline_sets, url);
+   $.each(args.events.events, function(i, v) {
+          Sources[i].loadJSON(args.events, url);
    });
   }
 };
@@ -217,5 +212,4 @@ Drupal.behaviors.timeline = function(context) {
     $texts = implode(', ', array_map('drupal_to_js', array(t('Filter:'), t('Highlight:'), t('Clear All'))));
     $script = 'var timeline = '. $script ." Drupal.timeline.controls.setup('{$timeline_array->id}-controls', timeline, $texts);";
   }*/
-  //Drupal.jsEnabled) { $(document).ready(function() { '. $script .' });
 };

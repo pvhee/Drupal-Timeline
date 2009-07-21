@@ -132,7 +132,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#required' => true,
       );
     
-      $form['fields']['advanced'] = array('#type' => 'fieldset', '#title' => t('TODO: Advanced visualization settings'), '#collapsible' => TRUE, '#collapsed' => TRUE);
+      $form['fields']['advanced'] = array('#type' => 'fieldset', '#title' => t('Advanced visualization settings'), '#collapsible' => TRUE, '#collapsed' => TRUE,  '#description' => t('For more information on this field visit !url', array('!url' => l(t('http://code.google.com/p/simile-widgets/wiki/Timeline_Event_Display'), 'http://code.google.com/p/simile-widgets/wiki/Timeline_Event_Display'))),);
       $form['fields']['advanced']['earliestStart'] = array(
         '#type' => 'select',
         '#title' => t('Earliest start'),
@@ -151,7 +151,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#title' => t('"Is duration" attribute'),
         '#options' => $field_names,
         '#default_value' => $this->options['fields']['advanced']['latestEnd'],
-        '#description' => t('Please select only Boolean fields! For more information on this field visit !url', array('!url' => l(t('http://code.google.com/p/simile-widgets/wiki/Timeline_Event_Display'), 'http://code.google.com/p/simile-widgets/wiki/Timeline_Event_Display'))),
+        '#description' => t('Please select only Boolean fields!'),
       );
     }
         
@@ -186,7 +186,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#default_value' =>isset($this->options['bands']['focus_custom']) ? $this->options['bands']['focus_custom'] : '',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-style-options-bands-focus' => array('custom')),
-      '#description' => t('Please enter a custom inicial date to focus the timeline on.') . t('Format: %time. Leave blank to use the time of form submission.', array('%time' => !empty($node->date) ? $node->date : format_date($node->created, 'custom', 'Y-m-d H:i:s O'))),
+      '#description' => t('Please enter a custom inicial date to focus the timeline on.') .' '. t('Format: %time.', array('%time' => format_date(time(), 'custom', 'Y-m-d H:i:s O'))),
     );
     $form['limit'] = array('#type' => 'fieldset', '#title' => t('Limit timeline bands'), '#collapsible' => TRUE, '#collapsed' => TRUE);
     $form['limit']['start'] = array(
@@ -203,7 +203,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#default_value' => isset($this->options['limit']['custom_start']) ? $this->options['limit']['custom_start'] : '',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-style-options-limit-start' => array('custom')),
-      '#description' => t('Please enter a custom end date for the timeline.') . t('Format: %time. Leave blank to use the time of form submission.', array('%time' => !empty($node->date) ? $node->date : format_date($node->created, 'custom', 'Y-m-d H:i:s O'))),
+      '#description' => t('Please enter a custom end date for the timeline.') .' '. t('Format: %time.', array('%time' => format_date(time(), 'custom', 'Y-m-d H:i:s O'))),
     );
     
     $form['limit']['end'] = array(
@@ -219,7 +219,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#default_value' => isset($this->options['limit']['custom_end']) ? $this->options['limit']['custom_end'] : '',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-style-options-limit-end' => array('custom')),
-      '#description' => t('Please enter a custom end date for the timeline.') . t('Format: %time. Leave blank to use the time of form submission.', array('%time' => !empty($node->date) ? $node->date : format_date($node->created, 'custom', 'Y-m-d H:i:s O'))),
+      '#description' => t('Please enter a custom end date for the timeline.') .' '. t('Format: %time.', array('%time' => format_date(time(), 'custom', 'Y-m-d H:i:s O'))),
     );
 
     // Miscellanous settings
@@ -238,15 +238,18 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    * Data for the simile timeline is getting collected within the view
    */
   function render() {
-
-  	
+/*
   	// collect data for simile timeline
   	$timeline_data = $this->_build_timeline_array();
   	$timeline_data = array('timeline' => array($timeline_data['id'] => $timeline_data));
 
     // convert to json and save into drupal's js settings array
     drupal_add_js($timeline_data, 'setting');
+  */
+    $timeline = new timeline($this->view);
+    $timeline->timeline_to_js();
     
+      
     // options that are used for template preprocessor
     $this->options['timeline'] = array(
       'class' => $this->view->name,

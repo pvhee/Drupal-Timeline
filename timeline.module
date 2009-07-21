@@ -6,15 +6,12 @@
  * Module providing a scrollable timeline view for Drupal events and nodes.
  */
 
-//////////////////////////////////////////////////////////////////////////////
 define('TIMELINE_HORIZONTAL', 0);
 define('TIMELINE_VERTICAL', 1);
-// define('TIMELINE_ISO_DATE',      '/^([\d]{4})-([\d]{2})-([\d]{2})T([\d]{2}):([\d]{2}):([\d]{2})/'); i think we cal remove this - fd
 
 include dirname(__FILE__) .'/timeline.theme.inc';
-
-//////////////////////////////////////////////////////////////////////////////
-// DRUPAL API HOOKS
+include dirname(__FILE__) .'/classes/timeline.class.inc';
+include dirname(__FILE__) .'/classes/timeline_event.class.inc';
 
 /**
  * Implementation of hook_help(). Provides online user help.
@@ -196,7 +193,7 @@ if (!function_exists('array_map_assoc')) {
     return array_map($callback, array_keys($array), array_values($array));
   }
 }
-
+ 
 function _timeline_to_dim($string) {
   return intval($string) . (strpos($string, '%') !== FALSE ? '%' : 'px');
 }

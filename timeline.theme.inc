@@ -19,9 +19,6 @@ function template_preprocess_views_view_timeline(&$vars) {
     $vars['style'] = implode('; ', array_map_assoc(create_function('$k, $v', 'return "$k: $v";'), array('width' => $vars['options']['timeline']['width'], 'height' => $vars['options']['timeline']['height'],)));
     $vars['controls'] = $vars['options']['misc']['controls'];
   }
-  else {
-    drupal_set_message(t('Simile Timeline Libraries not found'), 'error');
-  }
 }
 
 /**
@@ -49,11 +46,13 @@ function _timeline_include($timeline_theme_name) {
     //          Timeline_urlPrefix="/sites/all/libraries/simile_timeline/timeline_js/";
     //          Timeline_ajax_url="http://YOUR_SERVER/javascripts/timeline/timeline_ajax/simile-ajax-api.js"; 
     //
-    //          Couldn't get it to run, yet.
+    //          Couldn't get it to run, yet. 
+    //          Trying to include them within local.js so that they are set before. 
+    //          If including it inline it is not net when files get included within the header
     //
     elseif(variable_get('timeline_library_source', 'hosted') == 'local') {
       $timeline_path = libraries_get_path('simile_timeline');
-      drupal_add_js($timeline_path.'/timeline_js/test.js');
+      drupal_add_js($timeline_path.'/js/timeline_js/local.js');
       drupal_add_js($timeline_path.'/timeline_js/timeline-api.js?bundle=true');
     }
     
@@ -62,11 +61,12 @@ function _timeline_include($timeline_theme_name) {
       drupal_add_js(drupal_get_path('module', 'timeline') .'/themes/'.$timeline_theme_name.'.js');
     }
     
-    drupal_add_js(drupal_get_path('module', 'timeline') .'/timeline.js');
-    drupal_add_css(drupal_get_path('module', 'teline') .'/timeline.css');
+    drupal_add_js(drupal_get_path('module', 'timeline') .'/js/timeline.js');
+    drupal_add_css(drupal_get_path('module', 'timeline') .'/css/timeline.css');
     return true;
   }
   else {
+  	drupal_set_message(t('Simile Timeline Libraries not found'), 'error');
     return false;
   }   
 }
