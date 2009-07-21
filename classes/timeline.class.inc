@@ -20,26 +20,29 @@ class timeline {
   var $view;
   var $data;
   var $events;
+  var $sets;
+  var $color_id = 0;
   
   /**
    * Constructor.
    *
    * @param $view 
    */
-  function __construct(&$view) {
+  function __construct(&$view, $sets) {
   	$this->view = &$view;
+  	$this->sets = $sets;
   	
   	$this->data['events'] = $this->get_events();
-  	$this->data['id'] = $view->name;
+  	$this->data['id'] = $this->view->name;
   	$this->data['orientation'] = $view->style_options['display']['type'];
-    $this->data['initial_focus'] = $this->get_defined_date_field($view->style_options['bands']['focus'], $this->data['events']);
+  	$this->data['initial_focus'] = $this->get_defined_date_field($view->style_options['bands']['focus'], $view->style_options['bands']['focus_custom']);
     $this->data['timezone'] = 0; // missing
     $this->data['controls'] = FALSE; // missing
     $this->data['bands'] = $this->get_bands();
     $this->data['summary'] = strtoupper($view->style_options['bands']['band2_unit']);
     // startsOn ?!? ether.js on line 22 -fd
-    $this->data['timeline_start'] = $this->get_defined_date_field($view->style_options['limit']['start'], $this->data['events']);
-    $this->data['timeline_end'] = $this->get_defined_date_field($view->style_options['limit']['end'], $this->data['events']);
+    //$this->data['timeline_start'] = $this->get_defined_date_field($view->style_options['limit']['start'], $view->style_options['limit']['custom_start']);
+    //$this->data['timeline_end'] = $this->get_defined_date_field($view->style_options['limit']['end'], $view->style_options['limit']['custom_end']);
     $this->data['theme'] = $view->style_options['display']['appearance']['theme'];
     $this->data['bubble_max_height'] = $view->style_options['display']['appearance']['bubble_height'];
     $this->data['bubble_width'] = $view->style_options['display']['appearance']['bubble_width'];
@@ -58,11 +61,17 @@ class timeline {
    * 
    */
   function get_events() {
+
   	$events = array();
     if(!empty($this->view->result)) {
-     foreach (array($this->view->result) as $k => $set) {
+     foreach ($this->sets as $k => $set) {
+       $css_selector = $this->generate_css_selector();
+       $color = FALSE;
+       if(isset($this->view->style_options['grouping']) && $this->view->style_options['grouping'] != '') {
+         $color = $this->get_color();
+       }
        foreach ($set as $row) {
-         $event = new timeline_event(&$this->view, &$row);
+         $event = new timeline_event(&$this->view, &$row, $css_selector, $color);
        	 if($event->get_data()) {
        	   $events[] = $event->get_data();
        	 }
@@ -109,9 +118,37 @@ class timeline {
        return $this->data['events']['events'][count($this->data - 1)]['start'];
       case 'custom':
         if($options_field != '') {
-          return format_date(timeline_date_conversion($options_field, 'timestamp'));
+          return timeline_date_conversion(strtotime($options_field), 'timestamp');
         }
     }
     return FALSE;
+  }
+  
+  function get_color() {
+    $colors = array(
+      '#0A3FAC',
+      '#CE1500',
+      '#0A8624',
+      '#FF6A00',
+      '#CE0C72',
+      '#F8D100',
+    );
+
+    // Override color information if specified
+    if(isset($this->view->style_options['colors']['values']) && $this->view->style_options['colors']['values'] != '') {
+      $colors = preg_split("/\r\n|\n/", $this->view->style_options['colors']['values']);
+    }
+        
+    $tmp = $this->color_id;
+    $this->color_id++;
+    
+    while($tmp >= count($colors)) {
+      $tmp = $tmp - count($colors);
+    }
+    return $colors[$tmp];
+  }
+  
+  function generate_css_selector() {
+  	return $this->view->name.'-set-'.$this->color_id;
   }
 }

@@ -19,7 +19,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     $options['misc']['controls'] = array('default' => FALSE);
     $options['fields']['title'] = array('default' => '');
     $options['fields']['start'] = array('default' => '');
-    $options['fields']['end'] = array('default' => ''); 
+    $options['fields']['end'] = array('default' => '');
     return $options;
   }
 
@@ -28,6 +28,20 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    */
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
+    
+    $form['colors'] = array(
+      '#type' => 'fieldset', 
+      '#title' => t('Grouping colors'), 
+      '#collapsible' => TRUE, '#collapsed' => TRUE, 
+      '#description' => 'You can define the colors that are going to be used for the grouped events. Leave blank to use standard values',
+    );
+    $form['colors']['values'] = array(
+      '#type' => 'textarea',
+      '#title' => t('Color coding'),
+      '#default_value' => isset($this->options['colors']['values']) ? $this->options['colors']['values'] : '',
+      '#description' => t('You can override the colors for your groupings. Enter one hexadecimal RGB color value per line. Examples: #FF00FF #FF0099 #998811'),
+    );
+    
     $form['display'] = array('#type' => 'fieldset', '#title' => t('Display settings'), '#collapsible' => TRUE, '#collapsed' => FALSE);
     
     $form['display']['type'] = array(
@@ -78,6 +92,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#maxlength' => 6,
       '#description' => t('The maximum height of the bubbles in the timeline (in units of px), e.g. 200px (Scrollbar will be added for taller bubbles). Leave blank to let the bubbles scale automatically.'),
     );
+    
     $handlers = $this->display->handler->get_handlers('field');
     if (empty($handlers)) {
       $form['error_markup'] = array(
@@ -136,7 +151,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#type' => 'fieldset', 
         '#title' => t('Advanced visualization settings'), 
         '#collapsible' => TRUE, '#collapsed' => TRUE,  
-        '#description' => t('For more information on this field visit !url', array('!url' => l(t('http://wiki.github.com/xamanu/Drupal-Timeline'), 'http://wiki.github.com/xamanu/Drupal-Timeline'))),
+        '#description' => t('For more information on these fields visit !url', array('!url' => l(t('http://wiki.github.com/xamanu/Drupal-Timeline'), 'http://wiki.github.com/xamanu/Drupal-Timeline'))),
       );
       $form['fields']['advanced']['earliestStart'] = array(
         '#type' => 'select',
@@ -186,6 +201,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#dependency' => array('edit-style-options-bands-focus' => array('custom')),
       '#description' => t('Please enter a custom inicial date to focus the timeline on.') .' '. t('Format: %time.', array('%time' => format_date(time(), 'custom', 'Y-m-d H:i:s O'))),
     );
+/* js is unstable within timeline. maybe next version the simile grup is going to fix this. - fd
     $form['limit'] = array('#type' => 'fieldset', '#title' => t('Limit timeline bands'), '#collapsible' => TRUE, '#collapsed' => TRUE);
     $form['limit']['start'] = array(
       '#type' => 'select',
@@ -220,6 +236,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#description' => t('Please enter a custom end date for the timeline.') .' '. t('Format: %time.', array('%time' => format_date(time(), 'custom', 'Y-m-d H:i:s O'))),
     );
 
+/* DEPRECATED: Controls -fd
     // Miscellanous settings
     $form['misc'] = array('#type' => 'fieldset', '#title' => t('TODO: Miscellaneous settings'), '#collapsible' => TRUE, '#collapsed' => TRUE);
     $form['misc']['controls'] = array(
@@ -229,6 +246,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#options' => array(FALSE => t('Disabled'), TRUE => t('Enabled')),
       '#description' => t('Whether to display filtering and highlighting controls under the timeline. Not recommended for block mode.'),
     );
+    */
   }
 
   /**
@@ -236,8 +254,10 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    * Data for the simile timeline is getting collected within the view
    */
   function render() {
-
-    $timeline = new timeline($this->view);
+    // grouped sets
+    $sets = $this->render_grouping($this->view->result, $this->options['grouping']);
+    
+    $timeline = new timeline($this->view, $sets);
     $timeline->timeline_to_js();
 
     // options that are used for template preprocessor
@@ -246,11 +266,11 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       'width' => _timeline_to_dim($this->view->style_options['display']['width']),
       'height' => _timeline_to_dim($this->view->style_options['display']['height']),
       'align' => '',
-      'controls' => $this->view->style_options['misc']['controls'],
+      'controls' => FALSE, // $this->view->style_options['misc']['controls'],
       'theme' => $this->options['display']['appearance']['theme'],
     );   
 
-    //$sets = $this->render_grouping($this->view->result, $this->options['grouping']);
+    
 
     return theme($this->theme_functions(), $this->view, $this->options);
   }

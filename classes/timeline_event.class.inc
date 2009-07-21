@@ -7,15 +7,19 @@
 class timeline_event {
   var $view;
   var $data;
+  var $color;
+  var $css_selector;
   
  /**
    * Constructor.
    *
    * @param $view 
    */
-  function __construct($view, $row) {
+  function __construct($view, $row, $css_selector, $color) {
   	$this->view = $view;  	
-  	$this->data = $this->build_data($row);	
+  	$this->color = $color;	
+  	$this->css_selector = $css_selector;
+  	$this->data = $this->build_data($row);
   }
 
   /**
@@ -45,7 +49,11 @@ class timeline_event {
         if(isset($events_validated['earliestEnd']['formated'])) $data['earliestEnd'] = $events_validated['earliestEnd']['formated'];
         if(isset($events_validated['latestStart']['formated'])) $data['latestStart'] = $events_validated['latestStart']['formated'];
         $data['durationEvent'] = $events_validated['durationEvent'];
-      
+        if(is_string($this->color)) {
+          $data['color'] = $this->color;
+        }
+        // for better theming we give all grouped events the value of the grouping field
+        $data['classname'] = $this->css_selector;            
         $data['description'] = '';
         foreach ($this->view->display_handler->handlers['field'] as $key => $field) {
           if ($field->options['exclude'] != 1) {

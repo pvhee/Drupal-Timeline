@@ -1,20 +1,17 @@
 Drupal.timeline = {	
   timerID: null,
 
-  getTheme: function(theme_name, timeline_start, timeline_end, bubble_height, bubble_width) {
+  getTheme: function(theme_name, timeline_start, timeline_end, bubble_max_height, bubble_width) {
     var theme = Timeline.ClassicTheme.create();
-    //theme.event.label.width = parseInt(bubble_width); // px
-    theme.event.bubble.width = parseInt(bubble_width);
-    theme.event.bubble.maxHeight = parseInt(bubble_height);
-    //theme.timeline_start = new Date(Date.UTC(2009, 0, 1));
-    //theme.timeline_end = new Date(Date.UTC(2010, 0, 1));
+    theme.event.bubble.width = parseInt(bubble_width); // px
+    theme.event.bubble.maxHeight = parseInt(bubble_max_height);
+    //theme.event.label.width = parseInt(bubble_width); 
     return theme;
   },
 
   createWidget: function(args) {
   	args = eval(args);
-  	//SimileAjax_onLoad();
-    var theme = Drupal.timeline.getTheme(args.timeline_start, args.timeline_end, args.theme_name, args.bubble_max_height, args.bubble_width);
+    var theme = Drupal.timeline.getTheme(args.theme_name, args.timeline_start, args.timeline_end, args.bubble_max_height, args.bubble_width);
     var bandInfos = [];
     var Sources = [];
 
@@ -25,7 +22,7 @@ Drupal.timeline = {
     else{
       width = 100 / args.bands.length;
     }
-
+    
     $.each(args.bands, function(i, v) {
       var eventSource = new Timeline.DefaultEventSource();
       Sources.push(eventSource);
@@ -68,6 +65,8 @@ Drupal.timeline = {
    
    
    var timeline = Timeline.create(document.getElementById(args.id), bandInfos);
+
+   
    var url = document.location.href;
    //timeline_sets = eval("(" + timeline_sets + ")");
    $.each(args.events.events, function(i, v) {
