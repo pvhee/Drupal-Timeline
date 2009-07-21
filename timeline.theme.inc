@@ -11,13 +11,12 @@
 function template_preprocess_views_view_timeline(&$vars) {
 
   // create actual timeline
-  if(_timeline_include($vars['options']['timeline_array']['theme_name'])) {  
-    _timeline_build($vars['options']['timeline_array'], $vars['options']['timeline_options']['controls']);
-  
+  if(_timeline_include($vars['options']['timeline']['theme'])) {
+  	  
     // preprocess css information for the template
     $vars['id'] = $vars['view']->name;
     $vars['class'] = $vars['view']->name;
-    $vars['style'] = implode('; ', array_map_assoc(create_function('$k, $v', 'return "$k: $v";'), array('width' => $vars['options']['timeline_options']['width'], 'height' => $vars['options']['timeline_options']['height'],)));
+    $vars['style'] = implode('; ', array_map_assoc(create_function('$k, $v', 'return "$k: $v";'), array('width' => $vars['options']['timeline']['width'], 'height' => $vars['options']['timeline']['height'],)));
     $vars['controls'] = $vars['options']['misc']['controls'];
   }
   else {
@@ -54,11 +53,12 @@ function _timeline_include($timeline_theme_name) {
     //
     elseif(variable_get('timeline_library_source', 'hosted') == 'local') {
       $timeline_path = libraries_get_path('simile_timeline');
+      drupal_add_js($timeline_path.'/timeline_js/test.js');
       drupal_add_js($timeline_path.'/timeline_js/timeline-api.js?bundle=true');
     }
     
     // include custom theme files (if activated)
-    if($timeline_theme_name != 'classicTheme') {
+    if($timeline_theme_name != 'classicTheme' && $timeline_theme_name != 0) {
       drupal_add_js(drupal_get_path('module', 'timeline') .'/themes/'.$timeline_theme_name.'.js');
     }
     
@@ -69,28 +69,5 @@ function _timeline_include($timeline_theme_name) {
   else {
     return false;
   }   
-}
-
-/**
- * Build the timeline. Call javascript.
- * All settings (general settings and event sets) are converted to a json array 
- * and the timeline initializing process is getting called 
- * 
- * @param
- * $timeline_array - necesary information for creating the timeline
- * $timeline_sets - sets of events' information
- */
-function _timeline_build($args, $controls) {
-  $json = drupal_to_js($args);
-  $script = 'Drupal.timeline.createWidget('. $json .');';
-  if ($controls) {
-    $texts = implode(', ', array_map('drupal_to_js', array(t('Filter:'), t('Highlight:'), t('Clear All'))));
-    $script = 'var timeline = '. $script ." Drupal.timeline.controls.setup('{$timeline_array->id}-controls', timeline, $texts);";
-  }
-  $script = 'if (Drupal.jsEnabled) { $(document).ready(function() { '. $script .' }); }';
-  
-  // Not sure if I can get away with this in all browsers -jm
-  drupal_add_js($script, 'inline');
-  
 }
 

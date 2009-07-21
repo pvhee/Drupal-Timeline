@@ -1,4 +1,8 @@
-Drupal.timeline = {
+
+
+
+
+Drupal.timeline = {	
   timerID: null,
 
   getTheme: function(theme_name, timeline_start, timeline_end, bubble_height, bubble_width) {
@@ -14,6 +18,7 @@ Drupal.timeline = {
 
   createWidget: function(args) {
   	args = eval(args);
+  	//SimileAjax_onLoad();
     var theme = Drupal.timeline.getTheme(args.timeline_start, args.timeline_end, args.theme_name, args.bubble_max_height, args.bubble_width);
     var bandInfos = [];
     var Sources = [];
@@ -197,4 +202,20 @@ Drupal.timeline.controls = {
     }
     timeline.paint();
   }
+};
+
+Drupal.behaviors.timeline = function(context) {
+  if(Timeline && Drupal.settings.timeline) {
+    $.each(Drupal.settings.timeline, function(i, v) {
+      $('.' + i + '-wrapper:not(.timeline-processed)', context).each(function() {
+        $(this).addClass('timeline-processed');
+        Drupal.timeline.createWidget(v);
+      });
+    });
+  } 
+  /*if ($controls) {
+    $texts = implode(', ', array_map('drupal_to_js', array(t('Filter:'), t('Highlight:'), t('Clear All'))));
+    $script = 'var timeline = '. $script ." Drupal.timeline.controls.setup('{$timeline_array->id}-controls', timeline, $texts);";
+  }*/
+  //Drupal.jsEnabled) { $(document).ready(function() { '. $script .' });
 };

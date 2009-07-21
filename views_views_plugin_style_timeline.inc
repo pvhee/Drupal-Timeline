@@ -183,10 +183,10 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     $form['bands']['focus_custom'] = array(
       '#type' => 'textfield',
       '#title' => t('Custom inicial date focus'),
-      '#default_value' => isset($this->options['bands']['focus_custom']) ? $this->options['bands']['focus_custom'] : '',
+      '#default_value' =>isset($this->options['bands']['focus_custom']) ? $this->options['bands']['focus_custom'] : '',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-style-options-bands-focus' => array('custom')),
-      '#description' => t('Please enter a custom inicial date to focus the timeline on. Use this format: YYYY-MM-DD HH:MM:SS'),
+      '#description' => t('Please enter a custom inicial date to focus the timeline on.') . t('Format: %time. Leave blank to use the time of form submission.', array('%time' => !empty($node->date) ? $node->date : format_date($node->created, 'custom', 'Y-m-d H:i:s O'))),
     );
     $form['limit'] = array('#type' => 'fieldset', '#title' => t('Limit timeline bands'), '#collapsible' => TRUE, '#collapsed' => TRUE);
     $form['limit']['start'] = array(
@@ -203,7 +203,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#default_value' => isset($this->options['limit']['custom_start']) ? $this->options['limit']['custom_start'] : '',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-style-options-limit-start' => array('custom')),
-      '#description' => t('Please enter a custom end date for the timeline. Use this format: YYYY-MM-DD HH:MM:SS'),
+      '#description' => t('Please enter a custom end date for the timeline.') . t('Format: %time. Leave blank to use the time of form submission.', array('%time' => !empty($node->date) ? $node->date : format_date($node->created, 'custom', 'Y-m-d H:i:s O'))),
     );
     
     $form['limit']['end'] = array(
@@ -219,7 +219,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#default_value' => isset($this->options['limit']['custom_end']) ? $this->options['limit']['custom_end'] : '',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-style-options-limit-end' => array('custom')),
-      '#description' => t('Please enter a custom end date for the timeline. Use this format: YYYY-MM-DD HH:MM:SS'),
+      '#description' => t('Please enter a custom end date for the timeline.') . t('Format: %time. Leave blank to use the time of form submission.', array('%time' => !empty($node->date) ? $node->date : format_date($node->created, 'custom', 'Y-m-d H:i:s O'))),
     );
 
     // Miscellanous settings
@@ -239,16 +239,20 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    */
   function render() {
 
+  	
   	// collect data for simile timeline
-    $this->options['timeline_array'] = $this->_build_timeline_array(); 
-    
+  	$timeline_data = $this->_build_timeline_array();
+  	$timeline_data = array('timeline' => array($timeline_data['id'] => $timeline_data));
+    drupal_add_js($timeline_data, 'setting'); 
+     
     // options that are used for template preprocessor
-    $this->options['timeline_options'] = array(
+    $this->options['timeline'] = array(
       'class' => $this->view->name,
       'width' => _timeline_to_dim($this->view->style_options['display']['width']),
       'height' => _timeline_to_dim($this->view->style_options['display']['height']),
       'align' => '',
       'controls' => $this->view->style_options['misc']['controls'],
+      'theme' => $timeline_data['timeline']['timeline_date']['theme_name'],
     );   
 
     //$sets = $this->render_grouping($this->view->result, $this->options['grouping']);
@@ -460,7 +464,6 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     else {
       $event['durationEvent']['value'] = FALSE;
     }
-    dsm($event);
     return $event;
   }
 }
