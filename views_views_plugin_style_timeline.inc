@@ -243,8 +243,10 @@ class views_views_plugin_style_timeline extends views_plugin_style {
   	// collect data for simile timeline
   	$timeline_data = $this->_build_timeline_array();
   	$timeline_data = array('timeline' => array($timeline_data['id'] => $timeline_data));
-    drupal_add_js($timeline_data, 'setting'); 
-     
+
+    // convert to json and save into drupal's js settings array
+    drupal_add_js($timeline_data, 'setting');
+    
     // options that are used for template preprocessor
     $this->options['timeline'] = array(
       'class' => $this->view->name,
@@ -252,7 +254,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       'height' => _timeline_to_dim($this->view->style_options['display']['height']),
       'align' => '',
       'controls' => $this->view->style_options['misc']['controls'],
-      'theme' => $timeline_data['timeline']['timeline_date']['theme_name'],
+      'theme' => $this->options['display']['appearance']['theme'],
     );   
 
     //$sets = $this->render_grouping($this->view->result, $this->options['grouping']);
