@@ -50,7 +50,7 @@ function _timeline_include($timeline_theme_name) {
     //
     //          Couldn't get it to run, yet. 
     //          Trying to include them within local.js so that they are set before. 
-    //          If including it inline it is not net when files get included within the header
+    //          If including it inline it is not getting included when files get included within the header
     //
     elseif(variable_get('timeline_library_source', 'hosted') == 'local') {
       $timeline_lib_path = libraries_get_path('simile_timeline');

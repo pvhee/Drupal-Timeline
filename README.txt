@@ -39,6 +39,7 @@ After installing the module, do the following to create a new timeline view:
 3. Make a new view that is of the view type "Node"
 4. Under Fields, add that fields that you would like to have populate the title, 
    start and end dates and body of the timeline popup.
+   Note: Make sure that you are using exclusive date fields. Don't choose "Show from and to date"
 5. Set any other views settings, such as the maximum number of nodes to
    show, filters to select only certain nodes or dates, etc. You'll likely
    want to disable the view's pager option in order to get all events to

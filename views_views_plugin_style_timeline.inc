@@ -132,7 +132,12 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#required' => true,
       );
     
-      $form['fields']['advanced'] = array('#type' => 'fieldset', '#title' => t('Advanced visualization settings'), '#collapsible' => TRUE, '#collapsed' => TRUE,  '#description' => t('For more information on this field visit !url', array('!url' => l(t('http://code.google.com/p/simile-widgets/wiki/Timeline_Event_Display'), 'http://code.google.com/p/simile-widgets/wiki/Timeline_Event_Display'))),);
+      $form['fields']['advanced'] = array(
+        '#type' => 'fieldset', 
+        '#title' => t('Advanced visualization settings'), 
+        '#collapsible' => TRUE, '#collapsed' => TRUE,  
+        '#description' => t('For more information on this field visit !url', array('!url' => l(t('http://wiki.github.com/xamanu/Drupal-Timeline'), 'http://wiki.github.com/xamanu/Drupal-Timeline'))),
+      );
       $form['fields']['advanced']['earliestStart'] = array(
         '#type' => 'select',
         '#title' => t('Earliest start'),
@@ -145,13 +150,6 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#title' => t('Latest end'),
         '#options' => $field_names,
         '#default_value' => $this->options['fields']['advanced']['latestEnd'],
-      );
-      $form['fields']['advanced']['isDuration'] = array(
-        '#type' => 'select',
-        '#title' => t('"Is duration" attribute'),
-        '#options' => $field_names,
-        '#default_value' => $this->options['fields']['advanced']['latestEnd'],
-        '#description' => t('Please select only Boolean fields!'),
       );
     }
         

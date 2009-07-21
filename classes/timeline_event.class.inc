@@ -42,9 +42,9 @@ class timeline_event {
         $events_validated = $this->logic($row);
         $data['start'] = $events_validated['start']['formated'];
         if(isset($events_validated['end']['formated'])) $data['end'] = $events_validated['end']['formated'];
-        if(isset($events_validated['latestEnd']['formated'])) $data['latestEnd'] = $events_validated['latestEnd']['formated'];
-        if(isset($events_validated['earliestStart']['formated'])) $data['earliestStart'] = $events_validated['earliestStart']['formated'];
-        $data['duration'] = $events_validated['durationEvent'];
+        if(isset($events_validated['earliestEnd']['formated'])) $data['earliestEnd'] = $events_validated['earliestEnd']['formated'];
+        if(isset($events_validated['latestStart']['formated'])) $data['latestStart'] = $events_validated['latestStart']['formated'];
+        $data['durationEvent'] = $events_validated['durationEvent'];
       
         $data['description'] = '';
         foreach ($this->view->display_handler->handlers['field'] as $key => $field) {
@@ -70,14 +70,15 @@ class timeline_event {
 
   $event = array();
     foreach(array('start', 'end', 'earliestStart', 'latestEnd') as $event_field) {
+    	
       $field = $this->get_defined_field_usage($event_field);
       
       if(isset($row->{$field['alias']})) {
         $event[$event_field]['formated'] = timeline_date_conversion($row->{$field['alias']}, $field['date_format']);
         $event[$event_field]['timestamp'] = timeline_date_conversion($row->{$field['alias']}, $field['date_format'], 'timestamp');
+        
       }
     }
-
     // Validate date values
     if(isset($event['earliestStart'])) {
       if($event['start']['timestamp'] <= $event['earliestStart']['timestamp']) {
@@ -90,8 +91,8 @@ class timeline_event {
     }
     
     if(isset($event['latestEnd'])) {
-      if($event['lastestEnd']['timestamp'] <= $event['start']['timestamp']) {
-        unset($event['latestEnd']);
+      if($event['latestEnd']['timestamp'] <= $event['start']['timestamp']) {
+        unset($event['latetEnd']);
       }
       else {
         $event['earliestEnd'] = $event['end'];
@@ -106,8 +107,8 @@ class timeline_event {
       	unset($event['earliestEnd']);
       }
     }
-
-    if(!isset($event['end'])) {
+    
+    if(isset($event['end'])) {
    	  $event['durationEvent'] = TRUE;
     }
     else {
@@ -129,10 +130,21 @@ class timeline_event {
    *   date_format _ If it is an supported date information the expected date format
    */
   function get_defined_field_usage($type) {
-  	
+
   	if($timeline_settings_fields = $this->view->style_options['fields']) {
-      if(isset($timeline_settings_fields[$type])) {
-  	    $fieldname = $timeline_settings_fields[$type];
+  		
+  	  if(isset($timeline_settings_fields[$type])) {
+  	  	if(is_string($timeline_settings_fields[$type])) {
+  	  	  $fieldname = $timeline_settings_fields[$type];
+  	  	}
+  	  }
+  	  elseif(isset($timeline_settings_fields['advanced'][$type])) {
+  	  	if(is_string($timeline_settings_fields['advanced'][$type])) {
+  	  	  $fieldname = $timeline_settings_fields['advanced'][$type];
+  	  	}
+  	  }
+      if(isset($fieldname) && $fieldname != '') {
+      	
         $field_information = array(
           'alias' => $this->view->field[$fieldname]->field_alias,
           'handler' => $this->view->field[$fieldname]->definition['handler'],
