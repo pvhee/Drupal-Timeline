@@ -100,8 +100,6 @@ class timeline_event {
     }
     
     if(isset($event['end']) && $event['end']['timestamp'] <= $event['start']['timestamp']) {
-      dsm($event['start']);
-      dsm($event['end']);
       unset($event['end']);
       // to be tolerant for errors -fd
       if(isset($event['earliestEnd']) && $event['earliestEnd']['timestamp'] <= $event['start']['timestamp']) {

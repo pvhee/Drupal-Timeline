@@ -32,6 +32,8 @@ function template_preprocess_views_view_timeline(&$vars) {
 function _timeline_include($timeline_theme_name) {
 
   if($message = timeline_validate_library()) {
+  	$timeline_mod_path = drupal_get_path('module', 'timeline');
+  	
   	// Use SIMILE Server
     if(variable_get('timeline_library_source', 'hosted') == 'hosted') {
       $timeline_api = 'http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true';
@@ -51,18 +53,18 @@ function _timeline_include($timeline_theme_name) {
     //          If including it inline it is not net when files get included within the header
     //
     elseif(variable_get('timeline_library_source', 'hosted') == 'local') {
-      $timeline_path = libraries_get_path('simile_timeline');
-      drupal_add_js($timeline_path.'/js/timeline_js/local.js');
-      drupal_add_js($timeline_path.'/timeline_js/timeline-api.js?bundle=true');
+      $timeline_lib_path = libraries_get_path('simile_timeline');
+      drupal_add_js($timeline_mod_path.'/js/local.js');
+      drupal_add_js($timeline_lib_path.'/timeline_js/timeline-api.js');
     }
-    
+
     // include custom theme files (if activated)
     if($timeline_theme_name != 'classicTheme' && $timeline_theme_name != 0) {
-      drupal_add_js(drupal_get_path('module', 'timeline') .'/themes/'.$timeline_theme_name.'.js');
+      drupal_add_js($timeline_mod_path .'/themes/'.$timeline_theme_name.'.js');
     }
     
-    drupal_add_js(drupal_get_path('module', 'timeline') .'/js/timeline.js');
-    drupal_add_css(drupal_get_path('module', 'timeline') .'/css/timeline.css');
+    drupal_add_js($timeline_mod_path .'/js/timeline.js');
+    drupal_add_css($timeline_mod_path .'/css/timeline.css');
     return true;
   }
   else {

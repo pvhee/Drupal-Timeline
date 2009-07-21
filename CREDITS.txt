@@ -1,31 +1,18 @@
-DEVELOPERS
+Developers
 ----------
-* Arto Bendiken <http://bendiken.net/>
-  Project leader, Drupal 4.7.x branch maintainer
-  <http://drupal.org/user/26089>
+* Felix Delattre <http://www.felix.delattre.de/>
+  <http://drupal.org/user/359937>
 
-* Jeff Miccolis <http://www.developmentseed.org/blog/blog/66>
-  Drupal 5.x branch maintainer
+* Jeff Miccolis <http://www.developmentseed.org/team/jeff-miccolis>
   <http://drupal.org/user/31731>
-
-* David Donohue <http://drdonohue.com/>
-  Original module developer & project founder
-  <http://drupal.org/user/16745>
-
-SPONSORS
---------
-* MakaluMedia Group <http://www.makalumedia.com/>
-* SPAWAR Europe <https://www.eur.spawar.navy.mil/>
-
-CONTRIBUTIONS
--------------
-* Pete, aka fm <http://drupal.org/user/96243>
-* hickory <http://drupal.org/user/70429>
-* John Stalcup, aka MrTaco <http://drupal.org/user/86930>
-* Erwin Lion, aka belio <http://drupal.org/user/44922>
-* Eric Charikane, aka ec <http://drupal.org/user/16813>
-
-LIBRARIES
+  
+Themes
 ---------
-* MIT's SIMILE Timeline
-  <http://simile.mit.edu/timeline/>
+Fancy theme originally based on Shawn Keeling's nice theming work: 
+  <http://keelingdesign.com/theming_a_simile_timeline>
+
+
+Credits to them who started up with the 1.x branch
+----------
+* Arto Bendiken <http://drupal.org/user/26089> (Drupal 4.7.x branch maintainer)
+* David Donohue <http://drupal.org/user/16745> (Project founder)

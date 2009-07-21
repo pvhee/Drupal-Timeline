@@ -2,33 +2,60 @@
 
 REQUIREMENTS
 ------------
-Requires Drupal 6.x
-Requires the Views module [1] in order to create and display timelines.
+- PHP 5.2
+- Drupal 6.x 
+- Views 2 module [1]
 
-Requires SIMILE Timeline 1.2
+- Libraries:
+    SIMILE timeline 2.3.0
+    SIMILE Ajax 2.2.1
 
-Supports plotting timeline events for any Drupal content type, and includes
-extended support for Event nodes [2] as well as custom content types created
-using CCK [3] with the Date field type [4].
-
-For developers: the Simpletest module [5] is needed to run the unit tests.
+- Supporting
+    Libraries module [4] in order to be able to run the SIMILE libraries from your server.
+    CCK [2] and Date [3] modules
+      The module supports plotting timeline events for any Drupal content type, and includes
+      extended support for custom content types created using CCK  with the Date field type .
 
 [1] http://drupal.org/project/views
-[2] http://drupal.org/project/event
-[3] http://drupal.org/project/cck
-[4] http://drupal.org/project/date
-[5] http://drupal.org/project/simpletest
+[2] http://drupal.org/project/cck
+[3] http://drupal.org/project/date
+[4] http://drupal.org/project/libraries
+
 
 INSTALLATION
 ------------
 1. Copy all the module files into a subdirectory called sites/all/modules/timeline/
    under your Drupal installation directory.
-2. Place the timeline widget code in a /api sub-directory in timeline folder.
-3. Go to administer >> modules and enable the timeline module.
-   NOTE: also ensure the Views module is installed and enabled.
-4. Go to administer >> settings >> timeline to review and change the
-   configuration options to your liking.
-5. See README.txt for information on creating timeline views.
+
+2. Go to administer >> modules and enable the timeline module.
+   Ensure that the Views module is installed and enabled.
+
+3. Go to administer >> settings >> timeline to review and change the configuration options to your liking.
+   See "Local Installation" instructions to install the timeline libraries on your server. 
+
+4. See README.txt for information on creating timeline views.
+
+
+LOCAL INSTALLATION
+------------
+1. Follow general instructions step 1 and 2.
+
+2. Optain the libraries of SIMILE Timeline 2.3.0 and SIMILE Ajax 2.2.1
+
+   * You can check them out via Subversion from the SIMILE servers:
+     svn export http://simile-widgets.googlecode.com/svn/timeline/tags/2.3.0/src/webapp/api timeline_js
+     svn export http://simile-widgets.googlecode.com/svn/ajax/tags/2.2.1/src/webapp/api timeline_ajax
+
+   * Or you can download them from:
+     // TODO: Provide download location
+     
+3. Place the two libraries into a new sites/all/libraries/simile_timeline directory.
+   Note: timeline libraries have to be inside the folder: timeline_js
+         ajax libraries have to be inside the folder: timeline_ajax
+
+4. Go to administer >> settings >> timeline and activate local use. Check error messages on this page to 
+   be sure that everything is going to be included properly. 
+
 
 TABLES ADDED
 ------------

@@ -1,5 +1,20 @@
 // $Id: CHANGELOG.txt,v 1.2 2008/07/06 01:29:46 jmiccolis Exp $
 
+2009/07/21 - 6.x-2.0
+----------------------
+- Updated to Simile Timeline 2.3.0
+- Extended visualization functions from Simile Timeline 2.x  
+- Object based architecture for timeline settings and events
+- Better views 2 integration
+- Respecting Drupal's js behaviors
+- Support for individual themes. Providing three new themes
+- Depending on libraries module for local installation
+- Dropped support for events module
+- Supporting json only
+- Avoiding js callback to certain url
+- #121377 Arbitrary/custom initial focus 
+
+
 2008/07/05 - 5.x-1.0
 ----------------------
 - Fixed various bugs related to timeline controls. (Thanks to franskuipers)

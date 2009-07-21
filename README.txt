@@ -51,55 +51,6 @@ After installing the module, do the following to create a new timeline view:
    don't see the timeline at all, that most likely indicates the view
    selection criteria didn't result in any nodes to be displayed.
 
-CONFIGURATION
--------------
-By default, the timeline widget is referenced and loaded from:
-  sites/all/modules/timeline/api/timeline-api.js
-
-You can override this location from the module's configuration. You will
-need to download the widget's source code to the same host you are
-running your Drupal instance on. Provided you have the Subversion command
-line tools installed, the following is the easiest way to download the
-widget:
-
-  # svn export http://simile-widgets.googlecode.com/svn/timeline/trunk/src/webapp/api api 
-
-Alternatively you can download the widget code from:
-  
-  http://simile-widgets.googlecode.com/files/timeline_libraries_v2.3.0.zip   
-
-
-After downloading, you may need to set the Widget URL option in the module's
-configuration. For example if your module doesn't live in the default location
-of sites/all/modules.
-
-KNOWN ISSUES
-------------
-- The timeline widget insists on claiming that dates are GMT, regardless of
-  the actual specified timezone. This is an upstream issue in the widget
-  itself; we work around it the best we can by claiming dates are GMT while
-  they're in fact explicitly adjusted to the current user's timezone.
-- If the view's selection criteria results in no nodes, the timeline widget
-  isn't shown at all. We should show an empty timeline instead.
-- View settings are only used for building the set of nodes/events to
-  display on the timelines; the timeline user interface doesn't rely on view
-  settings in any other way. Thus, e.g. exposed filter settings won't work
-  with timeline views (#108886).
-
-FUTURE WORK
------------
-- There is currently no way to override timeline display settings (such as
-  width or height) on a view-specific basis. This is an important feature
-  that needs to be added. Currently it is planned to implement this using
-  view arguments, and in addition possibly provide a more user-friendly
-  screen (administer >> timelines) for managing timelines without having to
-  fiddle with a multitude of low-level Views module settings.
-- The timeline widget has rudimentary support for locales. Setting a locale
-  other than 'en', and automatically tying locale selection into Drupal's
-  localization features, should be investigated.
-- While we already support JSON and XML data feeds, the timeline widget now
-  also has a SPARQL data feed loader which could provide interesting
-  additional mashup capabilities.
 
 TROUBLESHOOTING
 ---------------
