@@ -55,9 +55,10 @@ class timeline_event {
         // for better theming we give all grouped events the value of the grouping field
         $data['classname'] = $this->css_selector;            
         $data['description'] = '';
+//dsm($this->view->result->render($row));
         foreach ($this->view->display_handler->handlers['field'] as $key => $field) {
           if ($field->options['exclude'] != 1) {
-            $data['description'] .= $field->render($row);
+            $data['description'] .= '<div>'.$field->render($row).'</div>';
            }
         }
         return $data;

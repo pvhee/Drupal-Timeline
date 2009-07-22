@@ -10,13 +10,15 @@ SIMILE project. Several demo timelines demonstrating the full range of
 capabilities for this widget are available on the SIMILE project site at:
   http://code.google.com/p/simile-widgets/
 
-The Views module is required to provide the list of nodes to render:
-  http://drupal.org/project/views
+This module is a style plugin for the Views module that represents date 
+information of nodes on horizontal or vertical timeline display.
+- http://drupal.org/project/views
 
-This module provides the "Timeline" view type for the Views module.
+The SIMILE Timeline (and Ajax) libraries can be used from the SIMILE server 
+or can be downloaded and installed into your (local) Drupal installation.
 
-In addition, a default views are provided to get you started quickly:
-- timeline_nodes: plots any nodes by their creation dates.
+A views is provided by default to get you started quickly: 
+* timeline_nodes: plots any nodes by their created date
 
 Timeline events with only a start date are displayed as points on the
 timeline view, whilst events with both a start and date are displayed as
@@ -47,10 +49,28 @@ After installing the module, do the following to create a new timeline view:
 6. Under "Basic settings" >> "Style" select the option "Timeline".
 7. Configure the Timeline display (click the gear next to the style selector). 
    Set the orientation, display and field settings that control how the 
-   timeline looks and behaves.
+   timeline looks and behaves. 
+   Please take special care when selecting the "field usage". These fields let you map
+   the fields selected in your view to the fields used by the timeline.
 8. Save your view and navigate to it to test out the timeline. In case you
    don't see the timeline at all, that most likely indicates the view
    selection criteria didn't result in any nodes to be displayed.
+
+CREDITS
+---------------
+Version 2.x 
+Maintained by Felix Delattre [1] with kindly support of Jeff Miccolis (Development Seed) [2].
+The included Fancy Theme is based on work of Shawn Kindling [3]
+
+Version 1.x 
+Originally created by David Donohue [4] and further developed by Arto Bendiken [5] and 
+Jeff Miccolis (Development Seed) [2].
+
+[1] Felix Delattre -> xamanu -> http://drupal.org/user/359937
+[2] Jeff Miccolis -> jmiccolis -> http://drupal.org/user/31731
+[3] Shawn Kindling -> http://keelingdesign.com/theming_a_simile_timeline
+[4] David Donohue -> dado -> http://drupal.org/user/16745
+[5] Art Bendiken -> arto -> http://drupal.org/user/26089
 
 
 TROUBLESHOOTING

@@ -10,7 +10,7 @@ REQUIREMENTS
     SIMILE timeline 2.3.0
     SIMILE Ajax 2.2.1
 
-- Supporting
+- Supporting the following modules:
     Libraries module [4] in order to be able to run the SIMILE libraries from your server.
     CCK [2] and Date [3] modules
       The module supports plotting timeline events for any Drupal content type, and includes
