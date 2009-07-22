@@ -8,14 +8,21 @@ It works in a similar way as Google Maps but for time-based events.
 This Drupal module is based on a JavaScript widget developed by the MIT
 SIMILE project. Several demo timelines demonstrating the full range of 
 capabilities for this widget are available on the SIMILE project site at:
-  http://code.google.com/p/simile-widgets/
+- http://code.google.com/p/simile-widgets/
 
 This module is a style plugin for the Views module that represents date 
 information of nodes on horizontal or vertical timeline display.
 - http://drupal.org/project/views
 
+The timeline provides support for the Date module. CCK date fields can be used
+to display all kinds of information on the timeline.
+- http://drupal.org/project/cck
+- http://drupal.org/project/date
+
 The SIMILE Timeline (and Ajax) libraries can be used from the SIMILE server 
-or can be downloaded and installed into your (local) Drupal installation.
+or can be downloaded and installed into your (local) Drupal installation using 
+the libraries module. (See INSTALL.txt for more information)
+- http://drupal.org/project/libraries
 
 A views is provided by default to get you started quickly: 
 * timeline_nodes: plots any nodes by their created date
@@ -24,13 +31,16 @@ Timeline events with only a start date are displayed as points on the
 timeline view, whilst events with both a start and date are displayed as
 continuous colored blocks (not dissimilar to Gantt chart entries).
 
+
 REQUIREMENTS
 ------------
 Please refer to the accompanying INSTALL.txt file.
 
+
 INSTALLATION
 ------------
 Please refer to the accompanying INSTALL.txt file.
+
 
 USAGE
 -----
@@ -55,6 +65,7 @@ After installing the module, do the following to create a new timeline view:
 8. Save your view and navigate to it to test out the timeline. In case you
    don't see the timeline at all, that most likely indicates the view
    selection criteria didn't result in any nodes to be displayed.
+
 
 CREDITS
 ---------------

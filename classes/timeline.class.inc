@@ -28,8 +28,8 @@ class timeline {
    *
    * @param $view 
    */
-  function __construct(&$view, $sets) {
-  	$this->view = &$view;
+  function __construct($view, $sets) {
+  	$this->view = $view;
   	$this->sets = $sets;
   	
   	$this->data['events'] = $this->get_events();
@@ -79,8 +79,6 @@ class timeline {
      }
     }
     return array(
-      'wikiURL' => '',
-      'wikiSection' => '',
       'dateTimeFormat' => 'rfc2822',
       'events' => $events,
     );

@@ -19,6 +19,7 @@ function timeline_views_plugins() {
         'uses fields' => TRUE,
         'uses options' => TRUE,
         'type' => 'normal',
+        'uses row plugin' => TRUE,
       ),
     ),
   );

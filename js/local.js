@@ -4,8 +4,8 @@
  *         that "jQuery" is undefined. It looks like that because of including it locally it delays 
  *         jquery. Wierd thing.
  */
-//var Timeline_ajax_url='/sites/all/libraries/simile_timeline/timeline_ajax/simile-ajax-api.js?bundle=false';
-//var Timeline_urlPrefix='/sites/all/libraries/simile_timeline/timeline_js/';
+//var Timeline_ajax_url='http://timeline-2/sites/all/libraries/simile_timeline/timeline_ajax/simile-ajax-api.js?bundle=true';
+//var Timeline_urlPrefix='http://timeline-2/sites/all/libraries/simile_timeline/timeline_js/';
 
 
 // shouldn't be required

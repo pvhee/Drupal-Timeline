@@ -3,6 +3,10 @@
 /**
  * Extending the view_plugin_style class to provide a timeline view style.
  */
+ 
+define('TIMELINE_HORIZONTAL', 0);
+define('TIMELINE_VERTICAL', 1);
+ 
 class views_views_plugin_style_timeline extends views_plugin_style {
   /**
    * Set default options
@@ -254,9 +258,15 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    * Data for the simile timeline is getting collected within the view
    */
   function render() {
-    // grouped sets
+  	
+  	// Load only when neccessary
+    module_load_include('inc', 'timeline', 'classes/timeline.class');
+    module_load_include('inc', 'timeline', 'classes/timeline_event.class');
+
+    // Group the rows according to the grouping field, if specified.
     $sets = $this->render_grouping($this->view->result, $this->options['grouping']);
-    
+
+    // Build data for timeline    
     $timeline = new timeline($this->view, $sets);
     $timeline->timeline_to_js();
 
@@ -268,11 +278,8 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       'align' => '',
       'controls' => FALSE, // $this->view->style_options['misc']['controls'],
       'theme' => $this->options['display']['appearance']['theme'],
-    );   
-
+    );
     
-
     return theme($this->theme_functions(), $this->view, $this->options);
   }
 }
-

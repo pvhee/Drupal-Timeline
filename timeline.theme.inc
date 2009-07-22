@@ -16,7 +16,7 @@ function template_preprocess_views_view_timeline(&$vars) {
     // preprocess css information for the template
     $vars['id'] = $vars['view']->name;
     $vars['class'] = $vars['view']->name;
-    $vars['style'] = implode('; ', array_map_assoc(create_function('$k, $v', 'return "$k: $v";'), array('width' => $vars['options']['timeline']['width'], 'height' => $vars['options']['timeline']['height'],)));
+    $vars['style'] = implode('; ', _timeline_array_map_assoc(create_function('$k, $v', 'return "$k: $v";'), array('width' => $vars['options']['timeline']['width'], 'height' => $vars['options']['timeline']['height'],)));
     $vars['controls'] = $vars['options']['misc']['controls'];
   }
 }
