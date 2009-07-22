@@ -108,11 +108,21 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     else {
       // Fields
       $field_names = array('' => '--');
+      $supported_date_handlers = array(
+        'views_handler_field_date',
+        'date_handler_field_multiple',
+      );
+      
       foreach ($handlers as $field => $handler) {
         $field_names[$field] = $handler->ui_name();
         if ($label = $handler->label()) {
           $field_names[$field] .= " (\"$label\")";
         }
+        if (in_array(get_class($handler), $supported_date_handlers)) {
+          $date_field_names[$field] = $field_names[$field];
+        }
+        
+        
       }
 
       $form['fields'] = array(
@@ -138,7 +148,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       $form['fields']['start'] = array(
         '#type' => 'select',
         '#title' => 'Start',
-        '#options' => $field_names,
+        '#options' => $date_field_names,
         '#default_value' => $this->options['fields']['start'],
         '#required' => true,
       );
@@ -146,7 +156,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       $form['fields']['end'] = array(
         '#type' => 'select',
         '#title' => 'End',
-        '#options' => $field_names,
+        '#options' => $date_field_names,
         '#default_value' => $this->options['fields']['end'],
         '#required' => true,
       );
@@ -160,14 +170,14 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       $form['fields']['advanced']['earliestStart'] = array(
         '#type' => 'select',
         '#title' => t('Earliest start'),
-        '#options' => $field_names,
+        '#options' => $date_field_names,
         '#default_value' => $this->options['fields']['advanced']['earliestStart'],
       );
     
       $form['fields']['advanced']['latestEnd'] = array(
         '#type' => 'select',
         '#title' => t('Latest end'),
-        '#options' => $field_names,
+        '#options' => $date_field_names,
         '#default_value' => $this->options['fields']['advanced']['latestEnd'],
       );
     }
