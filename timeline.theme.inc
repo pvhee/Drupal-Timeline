@@ -32,14 +32,14 @@ function template_preprocess_views_view_timeline(&$vars) {
  *          FALSE if Simile Exhibit Libraries aren't found
  */
 function _timeline_include($timeline_theme_name) {
-
+  $timeline_mod_path = drupal_get_path('module', 'timeline');
+  
   // Use SIMILE Server
   if (variable_get('timeline_library_source', 'hosted') == 'hosted') {
     $timeline_api = 'http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true';
     drupal_set_html_head('<script type="text/javascript" src="'. $timeline_api .'"></script>'); //  We have to wait to D7 to get rid of this: #91250 - fd
   }
   elseif (variable_get('timeline_library_source', 'hosted') == 'local' && $message = timeline_validate_library()) {
-    $timeline_mod_path = drupal_get_path('module', 'timeline');
 
     // Timeline libraries are available locally.
     //
