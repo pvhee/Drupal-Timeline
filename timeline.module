@@ -120,18 +120,17 @@ function timeline_validate_library() {
  * 
  */
 function timeline_available_themes() {
-  $timeline_theme_names = array('classicTheme');
-  foreach(file_scan_directory(drupal_get_path('module', 'timeline') .'/themes', '.js') as $timeline_theme) {
-    $timeline_theme_names[$timeline_theme->name] = $timeline_theme->name;
+  $timeline_theme_names = array('ClassicTheme' => 'ClassicTheme');
+  $timeline_theme_path = drupal_get_path('module', 'timeline') .'/themes';
+  foreach(file_scan_directory($timeline_theme_path, '.*', array('.', '..', 'CVS'), 0, FALSE) as $timeline_theme) {
+  	if(is_dir($timeline_theme_path.'/'.$timeline_theme->basename)) {
+      $timeline_theme_names[$timeline_theme->basename] = $timeline_theme->basename;
+  	}
   }
   return $timeline_theme_names;
 }
 
-// TODO: REMOVE THESE - jm
-function _timeline_array_map_assoc($callback, $array) {
-  return array_map($callback, array_keys($array), array_values($array));
-}
- 
+// TODO: REMOVE - jm
 function _timeline_to_dim($string) {
   return intval($string) . (strpos($string, '%') !== FALSE ? '%' : 'px');
 }

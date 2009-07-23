@@ -1,0 +1,280 @@
+div.FancyTheme {
+  background-image:url(images/desktop.jpg);
+  background-position: bottom right;
+  background-repeat: no-repeat;
+  padding:0;
+  position:relative;
+  border: none;
+}
+
+.timeline-wrapper {
+  position: absolute;
+}
+
+.FancyTheme .timeline-copyright {
+  display: none;
+}
+
+.FancyTheme .timeline-ether-marker-bottom {
+  color:#FFFFFF;
+  height:1.5em;
+  padding-left:2px;
+  width:5em;
+}
+
+.FancyTheme .timeline-ether-marker-bottom-emphasized {
+  border-left:1px solid white;
+  color:#FFFFFF;
+  height:2em;
+  padding-left:2px;
+  width:5em;
+}
+
+.FancyTheme .timeline-ether-marker-top {
+  border-left:1px solid white;
+  height:1.5em;
+  padding-left:2px;
+  width:5em;
+}
+
+.FancyTheme .timeline-ether-marker-top-emphasized {
+  border-left:1px solid white;
+  color:black;
+  height:2em;
+  padding-left:2px;
+  width:5em;
+}
+
+.FancyTheme .timeline-ether-marker-right {
+  border-top:1px solid white;
+  color:#AAAAAA;
+  height:1.5em;
+  padding-top:2px;
+  width:5em;
+}
+
+.FancyTheme .timeline-ether-marker-right-emphasized {
+  border-top:1px solid white;
+  color:black;
+  height:1.5em;
+  padding-top:2px;
+  width:7em;
+}
+
+.FancyTheme .timeline-ether-marker-left {
+  border-top:1px solid white;
+  color:#AAAAAA;
+  height:1.5em;
+  padding-top:2px;
+  width:5em;
+}
+
+.FancyTheme .timeline-ether-marker-left-emphasized {
+  border-top:1px solid white;
+  color:black;
+  height:1.5em;
+  padding-top:2px;
+  width:7em;
+}
+
+.FancyTheme .timeline-duration-event {
+  border:1px solid blue;
+  overflow:hidden;
+  position:absolute;
+}
+
+.FancyTheme .timeline-instant-event2 {
+  border-left:1px solid blue;
+  overflow:hidden;
+  padding-left:2px;
+  position:absolute;
+}
+
+.FancyTheme .timeline-instant-event {
+  overflow:hidden;
+  position:absolute;
+}
+
+.FancyTheme .timeline-event-bubble-title {
+  border-style:none;
+  font-weight:bold;
+  margin-bottom:10px;
+  width:260px;
+}
+
+.FancyTheme .timeline-event-bubble-title a {
+  color:#666699;
+  text-decoration:none;
+}
+
+.FancyTheme .timeline-event-bubble-title a:hover {
+ color:#666699;
+ text-decoration:underline;
+}
+
+.FancyTheme .timeline-event-bubble-body {
+}
+
+.FancyTheme .timeline-event-bubble-wiki {
+  color:#A0A040;
+  margin:0.5em;
+  text-align:right;
+}
+
+.FancyTheme .timeline-event-bubble-wiki a {
+  color:#A0A040;
+}
+
+.FancyTheme .timeline-event-bubble-time {
+  color:#AAAAAA;
+  margin-top:15px;
+}
+
+.FancyTheme .timeline-event-bubble-image {
+  float:right;
+  margin-right:10px;
+  padding-bottom:5px;
+  padding-left:5px;
+}
+
+.FancyTheme .timeline-container {
+  overflow:hidden;
+  position:relative;
+}
+
+.FancyTheme .timeline-message-container {
+  display:none;
+  left:35%;
+  position:absolute;
+  right:35%;
+  top:30%;
+  z-index:1000;
+}
+.FancyTheme .timeline-message {
+  font-size:120%;
+  font-weight:bold;
+  text-align:center;
+}
+
+.FancyTheme .timeline-message img {
+  vertical-align:middle;
+}
+
+.FancyTheme .timeline-band {
+  background-color:transparent;
+  position:absolute;
+  z-index:10;
+}
+
+.timeline-band a {
+  color:#FF0000;
+}
+
+.FancyTheme .timeline-band img {
+  margin-right:10px;
+}
+
+.FancyTheme .timeline-band img:hover {
+  background-image:url(images/circle_hover.png);
+  background-repeat:no-repeat;
+  height:11px;
+  width:11px;
+}
+
+.FancyTheme .timeline-band-inner {
+  background-color:transparent;
+  height:100%;
+  position:relative;
+  width:100%;
+}
+
+.FancyTheme .timeline-band-input {
+  background-color:transparent;
+  height:1em;
+  overflow:hidden;
+  position:absolute;
+  width:1em;
+  z-index:0;
+}
+
+.FancyTheme .timeline-band-input input {
+  background-color:transparent;
+  width:0;
+}
+
+.FancyTheme .timeline-band-layer {
+  background-color:transparent;
+  height:100%;
+  position:absolute;
+  width:100%;
+}
+
+.FancyTheme .timeline-band-layer-inner {
+  background-color:transparent;
+  height:100%;
+  position:relative;
+  width:100%;
+}
+
+.FancyTheme .timeline-ether-weekends {
+  background-color:transparent;
+}
+
+.FancyTheme .timeline-band-0 .timeline-ether-bg { 
+  background-color: transparent;
+}
+.FancyTheme .timeline-band-1 .timeline-ether-bg {
+  opacity: 0.5;
+  }
+  
+  
+#timeline_top_left {
+background-image:url(images/timeline_top_left.png);
+background-position:0 0;
+height:25px;
+left:0;
+margin:0;
+padding:0;
+position:absolute;
+top:0;
+width:25px;
+}
+#timeline_top_right {
+background-image:url(images/timeline_top_right.png);
+background-position:0 0;
+background-repeat:repeat;
+float:right;
+height:25px;
+margin:0;
+padding:0;
+position:absolute;
+right:0;
+top:0;
+width:25px;
+}
+#timeline_bot_left {
+background-image:url(images/timeline_bot_left.png);
+background-position:0 0;
+bottom:0;
+clear:left;
+float:left;
+height:25px;
+left:0;
+margin:0;
+padding:0;
+position:absolute;
+width:25px;
+}
+#timeline_bot_right {
+background-image:url(images/timeline_bot_right.png);
+background-position:0 0;
+bottom:0;
+clear:right;
+float:right;
+height:25px;
+margin:0;
+padding:0;
+position:absolute;
+right:0;
+width:25px;
+}

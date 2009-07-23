@@ -1,27 +1,27 @@
 /*==================================================
- *  Classic Theme
+ *  Dark Theme
  *==================================================
  */
 
 
 
-Timeline.ClassicTheme = new Object();
+Timeline.DarkTheme = new Object();
 
-Timeline.ClassicTheme.implementations = [];
+Timeline.DarkTheme.implementations = [];
 
-Timeline.ClassicTheme.create = function(locale) {
+Timeline.DarkTheme.create = function(locale) {
     if (locale == null) {
         locale = Timeline.getDefaultLocale();
     }
     
-    var f = Timeline.ClassicTheme.implementations[locale];
+    var f = Timeline.DarkTheme.implementations[locale];
     if (f == null) {
-        f = Timeline.ClassicTheme._Impl;
+        f = Timeline.DarkTheme._Impl;
     }
     return new f();
 };
 
-Timeline.ClassicTheme._Impl = function() {
+Timeline.DarkTheme._Impl = function() {
     this.firstDayOfWeek = 0; // Sunday
           
     // Note: Many styles previously set here are now set using CSS
@@ -43,7 +43,7 @@ Timeline.ClassicTheme._Impl = function() {
                                 // to be moved to anytime after this date.
     this.ether = {
         backgroundColors: [
-        //    "#EEE",
+        //    "#F00",
         //    "#DDD",
         //    "#CCC",
         //    "#AAA"

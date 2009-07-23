@@ -1,17 +1,17 @@
 Drupal.timeline = {	
   timerID: null,
 
-  getTheme: function(theme_name, timeline_start, timeline_end, bubble_max_height, bubble_width) {
-    var theme = Timeline.ClassicTheme.create();
+  getTheme: function(theme, timeline_start, timeline_end, bubble_max_height, bubble_width) {
+    var theme = Timeline[theme].create();
     theme.event.bubble.width = parseInt(bubble_width); // px
     theme.event.bubble.maxHeight = parseInt(bubble_max_height);
-    //theme.event.label.width = parseInt(bubble_width); 
+    //theme.event.label.width = parseInt(bubble_width);  // don't know what for -fd 
     return theme;
   },
 
   createWidget: function(args) {
   	args = eval(args);
-    var theme = Drupal.timeline.getTheme(args.theme_name, args.timeline_start, args.timeline_end, args.bubble_max_height, args.bubble_width);
+    var theme = Drupal.timeline.getTheme(args.theme, args.timeline_start, args.timeline_end, args.bubble_max_height, args.bubble_width);
     var bandInfos = [];
     var Sources = [];
 

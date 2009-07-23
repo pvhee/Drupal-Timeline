@@ -5,23 +5,23 @@
 
 
 
-Timeline.ClassicTheme = new Object();
+Timeline.LightTheme = new Object();
 
-Timeline.ClassicTheme.implementations = [];
+Timeline.LightTheme.implementations = [];
 
-Timeline.ClassicTheme.create = function(locale) {
+Timeline.LightTheme.create = function(locale) {
     if (locale == null) {
         locale = Timeline.getDefaultLocale();
     }
     
-    var f = Timeline.ClassicTheme.implementations[locale];
+    var f = Timeline.LightTheme.implementations[locale];
     if (f == null) {
-        f = Timeline.ClassicTheme._Impl;
+        f = Timeline.LightTheme._Impl;
     }
     return new f();
 };
 
-Timeline.ClassicTheme._Impl = function() {
+Timeline.LightTheme._Impl = function() {
     this.firstDayOfWeek = 0; // Sunday
           
     // Note: Many styles previously set here are now set using CSS

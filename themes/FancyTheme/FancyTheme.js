@@ -1,27 +1,27 @@
 /*==================================================
- *  Classic Theme
+ *  Fancy Theme
  *==================================================
  */
 
 
 
-Timeline.ClassicTheme = new Object();
+Timeline.FancyTheme = new Object();
 
-Timeline.ClassicTheme.implementations = [];
+Timeline.FancyTheme.implementations = [];
 
-Timeline.ClassicTheme.create = function(locale) {
+Timeline.FancyTheme.create = function(locale) {
     if (locale == null) {
         locale = Timeline.getDefaultLocale();
     }
     
-    var f = Timeline.ClassicTheme.implementations[locale];
+    var f = Timeline.FancyTheme.implementations[locale];
     if (f == null) {
-        f = Timeline.ClassicTheme._Impl;
+        f = Timeline.FancyTheme._Impl;
     }
     return new f();
 };
 
-Timeline.ClassicTheme._Impl = function() {
+Timeline.FancyTheme._Impl = function() {
     this.firstDayOfWeek = 0; // Sunday
           
     // Note: Many styles previously set here are now set using CSS
@@ -43,13 +43,13 @@ Timeline.ClassicTheme._Impl = function() {
                                 // to be moved to anytime after this date.
     this.ether = {
         backgroundColors: [
-        //    "#EEE",
+        //    "#F00",
         //    "#DDD",
         //    "#CCC",
         //    "#AAA"
         ],
-     //   highlightColor:     "white",
-        highlightOpacity:   50,
+        highlightColor:     "#FFF",
+        highlightOpacity:   20,
         interval: {
             line: {
                 show:       true,
@@ -57,42 +57,42 @@ Timeline.ClassicTheme._Impl = function() {
                // color:      "#aaa",
             },
             weekend: {
-                opacity:    50
-              //  color:      "#FFFFE0",
+                opacity:    30,
+                  color:    "#FFFFE0",
             },
             marker: {
                 hAlign:     "Bottom",
-                vAlign:     "Right"
-                                        /*
                 hBottomStyler: function(elmt) {
                     elmt.className = "timeline-ether-marker-bottom";
                 },
+
                 hBottomEmphasizedStyler: function(elmt) {
                     elmt.className = "timeline-ether-marker-bottom-emphasized";
                 },
+
                 hTopStyler: function(elmt) {
                     elmt.className = "timeline-ether-marker-top";
                 },
+
                 hTopEmphasizedStyler: function(elmt) {
                     elmt.className = "timeline-ether-marker-top-emphasized";
                 },
-                */
-                                        
-                    
-               /*
-                                  vRightStyler: function(elmt) {
+                vAlign:     "Right",
+                vRightStyler: function(elmt) {
                     elmt.className = "timeline-ether-marker-right";
                 },
+
                 vRightEmphasizedStyler: function(elmt) {
                     elmt.className = "timeline-ether-marker-right-emphasized";
                 },
+
                 vLeftStyler: function(elmt) {
                     elmt.className = "timeline-ether-marker-left";
                 },
+
                 vLeftEmphasizedStyler:function(elmt) {
                     elmt.className = "timeline-ether-marker-left-emphasized";
-                }
-                */
+                }                
             }
         }
     };
@@ -101,8 +101,8 @@ Timeline.ClassicTheme._Impl = function() {
         track: {
                    height: 10, // px. You will need to change the track
                                //     height if you change the tape height.
-                      gap:  2, // px. Gap between tracks
-                   offset:  2, // px. top margin above tapes
+                      gap:  5, // px. Gap between tracks
+                   offset:  10, // px. top margin above tapes
           autoWidthMargin:  1.5
           /* autoWidthMargin is only used if autoWidth (see above) is true.
              The autoWidthMargin setting is used to set how close the bottom of the
@@ -123,28 +123,29 @@ Timeline.ClassicTheme._Impl = function() {
             height:         4 // px. For thicker tapes, remember to change track height too.
         },
         instant: {
-                           icon: Timeline.urlPrefix + "images/dull-blue-circle.png", 
+                           icon: Timeline.urlPrefix + "../../../modules/timeline/themes/FancyTheme/images/circle.png", 
                                  // default icon. Icon can also be specified per event
                       iconWidth: 10,
                      iconHeight: 10,
                impreciseOpacity: 20, // opacity of the tape when durationEvent is false
-            impreciseIconMargin: 3   // A tape and an icon are painted for imprecise instant
+            impreciseIconMargin: 3,   // A tape and an icon are painted for imprecise instant
                                      // events. This attribute is the margin between the
                                      // bottom of the tape and the top of the icon in that
                                      // case.
-    //        color:             "#58A0DC",
-    //        impreciseColor:    "#58A0DC",
+            color:             "#333366",
+            impreciseColor:    "#333366"
         },
         duration: {
-            impreciseOpacity: 20 // tape opacity for imprecise part of duration events
-      //      color:            "#58A0DC",
-      //      impreciseColor:   "#58A0DC",
+            impreciseOpacity: 20, // tape opacity for imprecise part of duration events
+            opacity:        20, // color opacity, not text opacity
+            color:            "#333366",
+            impreciseColor:   "#333366"
         },
         label: {
             backgroundOpacity: 50,// only used in detailed painter
-               offsetFromLine:  3 // px left margin amount from icon's right edge
-      //      backgroundColor:   "white",
-      //      lineColor:         "#58A0DC",
+               offsetFromLine:  3, // px left margin amount from icon's right edge
+              backgroundColor:   "white",
+              lineColor:         "#58A0DC"
         },
         highlightColors: [  // Use with getEventPainter().setHighlightMatcher
                             // See webapp/examples/examples.js
@@ -155,7 +156,7 @@ Timeline.ClassicTheme._Impl = function() {
         ],
         highlightLabelBackground: false, // When highlighting an event, also change the event's label background?
         bubble: {
-            width:          250, // px
+            width:          350, // px
             maxHeight:        0, // px Maximum height of bubbles. 0 means no max height. 
                                  // scrollbar will be added for taller bubbles
             titleStyler: function(elmt) {

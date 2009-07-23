@@ -16,8 +16,10 @@ function template_preprocess_views_view_timeline(&$vars) {
     // preprocess css information for the template
     $vars['id'] = $vars['view']->name;
     $vars['class'] = $vars['view']->name;
-    $vars['style'] = implode('; ', _timeline_array_map_assoc(create_function('$k, $v', 'return "$k: $v";'), array('width' => $vars['options']['timeline']['width'], 'height' => $vars['options']['timeline']['height'],)));
+    $vars['height'] = $vars['options']['timeline']['height'];
+    $vars['width'] = $vars['options']['timeline']['width'];
     $vars['controls'] = $vars['options']['misc']['controls'];
+    $vars['timeline_theme'] = $vars['options']['timeline']['theme'];
   }
 }
 
@@ -57,14 +59,14 @@ function _timeline_include($timeline_theme_name) {
       drupal_add_js($timeline_mod_path.'/js/local.js');
       drupal_add_js($timeline_lib_path.'/timeline_js/timeline-api.js');
     }
-
-    // include custom theme files (if activated)
-    if($timeline_theme_name != 'classicTheme' && $timeline_theme_name != 0) {
-      drupal_add_js($timeline_mod_path .'/themes/'.$timeline_theme_name.'.js');
-    }
-    
-    drupal_add_js($timeline_mod_path .'/js/timeline.js');
     drupal_add_css($timeline_mod_path .'/css/timeline.css');
+   
+    // include custom theme files (if activated)
+    if($timeline_theme_name != 'ClassicTheme' && $timeline_theme_name != false) {
+      drupal_add_js($timeline_mod_path .'/themes/'.$timeline_theme_name.'/'.$timeline_theme_name.'.js');
+      drupal_add_css($timeline_mod_path .'/themes/'.$timeline_theme_name.'/'.$timeline_theme_name.'.css');
+    }
+    drupal_add_js($timeline_mod_path .'/js/timeline.js');
     return true;
   }
   else {
