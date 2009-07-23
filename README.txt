@@ -1,4 +1,4 @@
-// $Id$
+// $Id: README.txt,v 1.7.2.1.2.2 2009/07/23 20:56:45 xamanu Exp $
 
 DESCRIPTION
 -----------
@@ -25,7 +25,7 @@ the libraries module. (See INSTALL.txt for more information). By default, the
 SIMILE Timeline (and Ajax) libraries can be used from the SIMILE server.
 - http://drupal.org/project/libraries
 
-A views is provided by default to get you started quickly: 
+A view is provided by default to get you started quickly: 
 * timeline_nodes: plots any nodes by their created date
 
 Timeline events with only a start date are displayed as points on the
@@ -72,7 +72,7 @@ CREDITS
 ---------------
 Version 2.x 
 Maintained by Felix Delattre [1] with kindly support of Jeff Miccolis (Development Seed) [2].
-The included Fancy Theme is based on work of Shawn Kindling [3]
+The included Fancy Theme is based on work by Shawn Kindling [3]
 
 Version 1.x 
 Originally created by David Donohue [4] and further developed by Arto Bendiken [5] and 

@@ -1,5 +1,5 @@
 <?php
-// $Id$
+// $Id: views_views_plugin_style_timeline.inc,v 1.1.2.1 2009/07/23 18:21:23 xamanu Exp $
 
 /**
  * @file
