@@ -20,11 +20,13 @@ function timeline_help($section) {
       return t('Provides a draggable and scrollable timeline view. Requires the
                 views module and the libraries module and makes use of the cck and date module if available.');
     case 'admin/settings/timeline':
+      if (module_exists('views_ui')) 
+        $timeline_route = t('To actually create and manage timelines, use the <a href="!views">views administration</a> screen.</p>', array('!views' => url('admin/build/views')));
+      else 
+        $timeline_route = t('To actually create and manage timelines, enable the Views UI module in the <a href="!modules">modules administration</a> screen.</p>', array('!modules' => url('admin/build/modules')));
       return t('<p>Timeline views provides a draggable and scrollable widget for
                  visualizing temporal information. This screen allows you to
-                 override default settings for each timeline. To actually
-                 create and manage timelines, use the <a href="!views">views
-                 administration</a> screen.</p>', array('!views' => url('admin/build/views')));
+                 override default settings for each timeline. ' . $timeline_route);
   }
 }
 

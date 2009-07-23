@@ -25,6 +25,7 @@ function timeline_views_plugins() {
   );
 }
 
+
 /**
  * Implementation of hook_views_default_views().
  */
@@ -34,7 +35,7 @@ function timeline_views_default_views() {
   // Add timeline_nodes view.
   $view = new view;
   $view->name = 'timeline_nodes';
-  $view->description = 'Example timeline of nodes; accepts YYYY/MM arg';
+  $view->description = 'Example timeline of nodes';
   $view->tag = '';
   $view->view_php = '';
   $view->base_table = 'node';
@@ -99,64 +100,20 @@ function timeline_views_default_views() {
       'relationship' => 'none',
     ),
   ));
-  $handler->override_option('arguments', array(
-    'created_year' => array(
-      'id' => 'created_year',
+  $handler->override_option('filters', array(
+    'status' => array(
+        'operator' => '=',
+        'value' => '1',
+        'group' => '0',
+        'exposed' => FALSE,
+        'expose' => array(
+        'operator' => FALSE,
+        'label' => '',
+      ),
+      'id' => 'status',
       'table' => 'node',
-      'field' => 'created_year',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'default_argument_type' => 'fixed',
+      'field' => 'status',
       'relationship' => 'none',
-      'title' => '',
-      'default_action' => 'ignore',
-      'wildcard' => '',
-      'wildcard_substitution' => '',
-      'default_options_div_prefix' => '',
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'event' => 0,
-        'image' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(
-        '1' => 0,
-      ),
-      'validate_argument_type' => 'tid',
-      'validate_argument_php' => '',
-    ),
-    'created_month' => array(
-      'id' => 'created_month',
-      'table' => 'node',
-      'field' => 'created_month',
-      'validate_type' => 'none',
-      'validate_fail' => 'not found',
-      'default_argument_type' => 'fixed',
-      'relationship' => 'none',
-      'title' => '',
-      'default_action' => 'ignore',
-      'wildcard' => '',
-      'wildcard_substitution' => '',
-      'default_options_div_prefix' => '',
-      'default_argument_fixed' => '',
-      'default_argument_php' => '',
-      'validate_argument_node_type' => array(
-        'event' => 0,
-        'image' => 0,
-        'page' => 0,
-        'story' => 0,
-      ),
-      'validate_argument_node_access' => 0,
-      'validate_argument_nid_type' => 'nid',
-      'validate_argument_vocabulary' => array(
-        '1' => 0,
-      ),
-      'validate_argument_type' => 'tid',
-      'validate_argument_php' => '',
     ),
   ));
   $handler->override_option('access', array(
@@ -165,27 +122,37 @@ function timeline_views_default_views() {
   $handler->override_option('cache', array(
     'type' => 'none',
   ));
-  $handler->override_option('items_per_page', 50);
+  $handler->override_option('items_per_page', 0);
   $handler->override_option('style_plugin', 'timeline');
   $handler->override_option('style_options', array(
     'grouping' => '',
-    'type' => '0',
+    'colors' => array(
+      'values' => '',
+    ),
     'display' => array(
+      'type' => '0',
       'width' => '100%',
-      'height' => '350px',
-      'focus' => 'first',
-    ),
-    'bands' => array(
-      'band1_unit' => 'week',
-      'band2_unit' => 'year',
-    ),
-    'misc' => array(
-      'controls' => '0',
+      'height' => '400px',
+      'appearance' => array(
+        'theme' => 'ClassicTheme',
+        'bubble_width' => '250',
+        'bubble_height' => '',
+      ),
     ),
     'fields' => array(
       'title' => 'title',
       'start' => 'created',
       'end' => 'created',
+      'advanced' => array(
+        'earliestStart' => 'created',
+        'latestEnd' => 'created',
+      ),
+    ),
+    'bands' => array(
+      'band1_unit' => 'week',
+      'band2_unit' => 'month',
+      'focus' => 'first',
+      'focus_custom' => '',
     ),
   ));
   $handler = $view->new_display('page', 'Page', 'page_1');
