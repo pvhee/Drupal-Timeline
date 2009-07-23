@@ -37,7 +37,10 @@ INSTALLATION
 
 
 LOCAL INSTALLATION
-------------
+-------------------
+By default, the SIMILE Timeline (and Ajax) libraries can be used from the SIMILE server. 
+But if you want to install them locally you can follow these steps:
+
 1. Follow general instructions step 1 and 2.
 
 2. Optain the libraries of SIMILE Timeline 2.3.0 and SIMILE Ajax 2.2.1
@@ -57,7 +60,7 @@ LOCAL INSTALLATION
    be sure that everything is going to be included properly. 
 
 
-TABLES ADDED
-------------
+DATABASE MODIFICATIONS:
+-----------------------
 This module does not add any new database tables or otherwise modify the
 Drupal database upon installation.

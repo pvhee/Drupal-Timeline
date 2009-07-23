@@ -1,4 +1,4 @@
-// $Id: README.txt,v 1.7.2.1 2009/06/11 13:01:55 jmiccolis Exp $
+// $Id$
 
 DESCRIPTION
 -----------
@@ -21,7 +21,8 @@ to display all kinds of information on the timeline.
 
 The SIMILE Timeline (and Ajax) libraries can be used from the SIMILE server 
 or can be downloaded and installed into your (local) Drupal installation using 
-the libraries module. (See INSTALL.txt for more information)
+the libraries module. (See INSTALL.txt for more information). By default, the 
+SIMILE Timeline (and Ajax) libraries can be used from the SIMILE server.
 - http://drupal.org/project/libraries
 
 A views is provided by default to get you started quickly: 
@@ -77,11 +78,16 @@ Version 1.x
 Originally created by David Donohue [4] and further developed by Arto Bendiken [5] and 
 Jeff Miccolis (Development Seed) [2].
 
+
+Both timelines are based on the Timeline developed by the SIMILE project [6]
+
+
 [1] Felix Delattre -> xamanu -> http://drupal.org/user/359937
 [2] Jeff Miccolis -> jmiccolis -> http://drupal.org/user/31731
 [3] Shawn Kindling -> http://keelingdesign.com/theming_a_simile_timeline
 [4] David Donohue -> dado -> http://drupal.org/user/16745
 [5] Art Bendiken -> arto -> http://drupal.org/user/26089
+[6] SIMILE project -> http://code.google.com/p/simile-widgets/
 
 
 TROUBLESHOOTING
