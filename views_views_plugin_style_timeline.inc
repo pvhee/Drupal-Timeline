@@ -1,5 +1,5 @@
 <?php
-// $Id: views_views_plugin_style_timeline.inc,v 1.1.2.1 2009/07/23 18:21:23 xamanu Exp $
+// $Id: views_views_plugin_style_timeline.inc,v 1.1.2.2 2009/07/24 02:15:32 xamanu Exp $
 
 /**
  * @file
@@ -17,18 +17,35 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    * Set default options
    */
   function option_definition() {
-    $options = parent::option_definition();
 
-    $options['type'] = array('default' => TIMELINE_HORIZONTAL);
-    $options['display']['width'] = array('default' => 200);
-    $options['display']['height'] = array('default' => 100);
-    $options['display']['focus'] = array('default' => 'today');
-    $options['bands']['band1_unit'] = array('default' => 'day');
-    $options['bands']['band2_unit'] = array('default' => 'month');
-    $options['misc']['controls'] = array('default' => FALSE);
-    $options['fields']['title'] = array('default' => '');
-    $options['fields']['start'] = array('default' => '');
-    $options['fields']['end'] = array('default' => '');
+    $options = parent::option_definition();
+    $options['display']['contains'] = array(
+      'type' => array('default' => TIMELINE_HORIZONTAL),
+      'appearance' => array(
+        'contains' => array(
+          'theme' => array('default' => 'ClassicTheme'),
+          'bubble_width' => array('default' => '250'),
+          'bubble_height' => array('default' => ''),
+        ),
+      ),
+    );
+    $options['bands']['contains'] = array(
+      'focus' => array('default' => 'today'),
+      'band1_unit' => array('default' => 'day'),
+      'band2_unit' => array('default' => 'month'),
+    );
+    $options['misc']['contains'] = array('controls' => array('default' => FALSE),);
+    $options['fields']['contains'] = array(
+      'title' => array('default' => ''),
+      'start' => array('default' => ''),
+      'end' => array('default' => ''),
+      'advanced' => array(
+        'contains' => array(
+          'earliestStart' => '',
+          'latestEnd' => '',
+         ),
+       ),
+    );    
     return $options;
   }
 
@@ -37,7 +54,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    */
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-
+    dsm($this->options);
     $form['colors'] = array(
       '#type' => 'fieldset',
       '#title' => t('Grouping colors'),
@@ -56,7 +73,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#type' => 'radios',
       '#title' => t('Timeline type'),
       '#options' => array(TIMELINE_HORIZONTAL => t('Horizontal'), TIMELINE_VERTICAL => t('Vertical')),
-      '#default_value' => $this->options['type'],
+      '#default_value' => $this->options['display']['type'],
     );
     $form['display']['width'] = array(
       '#type' => 'textfield',
@@ -90,7 +107,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#default_value' => $this->options['display']['appearance']['bubble_width'],
       '#size' => 6,
       '#maxlength' => 6,
-      '#description' => t('The width of the bubbles in the timeline (in units of px), e.g. 200px. Leave blank to use default value from theme.'),
+      '#description' => t('The width of the bubbles in the timeline (in units of px), e.g. 250. Leave blank to use default value from theme.'),
     );
     $form['display']['appearance']['bubble_height'] = array(
       '#type' => 'textfield',
@@ -98,7 +115,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#default_value' => $this->options['display']['appearance']['bubble_height'],
       '#size' => 6,
       '#maxlength' => 6,
-      '#description' => t('The maximum height of the bubbles in the timeline (in units of px), e.g. 200px (Scrollbar will be added for taller bubbles). Leave blank to let the bubbles scale automatically.'),
+      '#description' => t('The maximum height of the bubbles in the timeline (in units of px), e.g. 400 (Scrollbar will be added for taller bubbles). Leave blank to let the bubbles scale automatically.'),
     );
 
     $handlers = $this->display->handler->get_handlers('field');
@@ -112,6 +129,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     else {
       // Fields
       $field_names = array('' => '--');
+      $date_field_names = array('' => '--');
       $supported_date_handlers = array(
         'views_handler_field_date',
         'date_handler_field_multiple',
@@ -160,7 +178,6 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#title' => 'End',
         '#options' => $date_field_names,
         '#default_value' => $this->options['fields']['end'],
-        '#required' => TRUE,
       );
 
       $form['fields']['advanced'] = array(
@@ -201,12 +218,11 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       '#options' => array_merge(array('' => t('Not displayed')), $intervals),
       '#description' => t(''),
     );
-
     $form['bands']['focus'] = array(
       '#type' => 'select',
       '#title' => t('Initial date focus'),
+      '#options' => array('today' => t('The current date'), 'first' => t('First event in timeline'), 'last' => t('Last event in timeline'), 'custom' => t('Custom')),
       '#default_value' => $this->options['bands']['focus'],
-      '#options' => array('first' => t('First event in timeline'), 'last' => t('Last event in timeline'), 'today' => t('The current date'), 'custom' => t('Custom')),
       '#description' => t('Determines which event or date the timeline view should initially be centered on after it has loaded. Leave blank to use default value.'),
     );
     $form['bands']['focus_custom'] = array(

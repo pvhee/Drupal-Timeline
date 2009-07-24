@@ -1,5 +1,5 @@
 <?php
-// $Id: timeline.views.inc,v 1.6.2.3.2.3 2009/07/23 22:45:37 xamanu Exp $
+// $Id: timeline.views.inc,v 1.6.2.3.2.4 2009/07/24 02:15:32 xamanu Exp $
 /**
  * @file
  * Views plugins definition for timeline.
@@ -151,7 +151,7 @@ function timeline_views_default_views() {
     'bands' => array(
       'band1_unit' => 'week',
       'band2_unit' => 'month',
-      'focus' => 'first',
+      'focus' => 'today',
       'focus_custom' => '',
     ),
   ));
