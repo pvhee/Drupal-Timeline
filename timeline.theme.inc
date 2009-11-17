@@ -1,5 +1,5 @@
 <?php
-// $Id: timeline.theme.inc,v 1.13.2.1.2.4 2009/07/23 23:09:53 xamanu Exp $
+// $Id: timeline.theme.inc,v 1.13.2.1.2.13 2009/10/19 13:30:30 xamanu Exp $
 /**
  * @file
  * Theme functions for timeline.
@@ -9,7 +9,9 @@
  * Implementation of template_process for views-view-timeline.
  */
 function template_preprocess_views_view_timeline(&$vars) {
-
+  if (isset($vars['options']['debug'])) {
+    $vars['debug'] = theme('timeline_debug', $vars['options']['debug']);
+  }
   // create actual timeline
   if (_timeline_include($vars['options']['timeline']['theme'])) {
 
@@ -19,8 +21,54 @@ function template_preprocess_views_view_timeline(&$vars) {
     $vars['height'] = $vars['options']['timeline']['height'];
     $vars['width'] = $vars['options']['timeline']['width'];
     $vars['controls'] = $vars['options']['misc']['controls'];
-    $vars['timeline_theme'] = $vars['options']['timeline']['theme'];
+    if($vars['options']['timeline']['theme'] == "ClassicTheme") {
+      $vars['timeline_theme'] = "ClassicTheme";
+    }
+    else {
+      $vars['timeline_theme'] = drupal_substr(strrchr($vars['options']['timeline']['theme'], '/'), 1);
+    }
   }
+}
+
+
+/**
+ * Overridable theme function.
+ * This functions prints a warning when no data is available.
+ */
+function theme_timeline_nodata() {
+  drupal_set_message(t('There is no data available to show on the timeline'), 'warning');
+}
+
+/**
+ * Overridable theme function.
+ * This returns the title of each event bubble on the timeline.
+ */
+function theme_timeline_bubble_title($row, $alias) {
+  return $row->$alias;
+}
+
+
+/**
+ * Overridable theme function.
+ * This creates the url that the title of each event bubble is linked to.
+ */
+function theme_timeline_bubble_url($row, $link_enabled) {
+  if ($link_enabled) {
+    return base_path() . drupal_get_path_alias('node/' . $row->nid);
+  }
+  return FALSE;
+}
+
+/*
+ * Function to theme a textarea with a array inside
+ */
+function theme_timeline_debug($debug_array) {
+  $output = '<div id="timeline_debug">';
+  $output .= '<label><strong>DEBUG:</strong></label>';
+  $output .= '<div class="resizable-textarea"><textarea id="edit-code" class="form-textarea resizable textarea-processed" name="code" rows ="10" cols="60">';
+  $output .= var_export($debug_array, TRUE);
+  $output .= '</textarea></div></div>';
+  return $output;
 }
 
 /**
@@ -31,45 +79,31 @@ function template_preprocess_views_view_timeline(&$vars) {
  * @return: TRUE if everything could be included properly
  *          FALSE if Simile Exhibit Libraries aren't found
  */
-function _timeline_include($timeline_theme_name) {
+function _timeline_include($timeline_theme) {
   $timeline_mod_path = drupal_get_path('module', 'timeline');
-  
+
   // Use SIMILE Server
   if (variable_get('timeline_library_source', 'hosted') == 'hosted') {
     $timeline_api = 'http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true';
     drupal_set_html_head('<script type="text/javascript" src="'. $timeline_api .'"></script>'); //  We have to wait to D7 to get rid of this: #91250 - fd
   }
   elseif (variable_get('timeline_library_source', 'hosted') == 'local' && $message = timeline_validate_library()) {
-
-    // Timeline libraries are available locally.
-    //
-    // PROBLEM: timeline 2.x uses another library (simile-ajax) this has to be included with
-    //          setting two global js variable before timeline-api.js is getting included:
-    //
-    //          Timeline_urlPrefix="/sites/all/libraries/simile_timeline/timeline_js/";
-    //          Timeline_ajax_url="http://YOUR_SERVER/javascripts/timeline/timeline_ajax/simile-ajax-api.js";
-    //
-    //          Couldn't get it to run, yet.
-    //          Trying to include them within local.js so that they are set before.
-    //          If including it inline it is not getting included when files get included within the header
-    //
     $timeline_lib_path = libraries_get_path('simile_timeline');
-    drupal_add_js($timeline_mod_path . '/js/local.js');
+    drupal_add_js(file_directory_path() . '/timeline/local_variables.js');
     drupal_add_js($timeline_lib_path . '/timeline_js/timeline-api.js');
   }
   else {
     drupal_set_message(t('Simile Timeline Libraries not found'), 'error');
     return FALSE;
   }
-  
+
   drupal_add_css($timeline_mod_path . '/css/timeline.css');
 
   // include custom theme files (if activated)
-  if ($timeline_theme_name != 'ClassicTheme' && $timeline_theme_name != FALSE) {
-    drupal_add_js($timeline_mod_path . '/themes/' . $timeline_theme_name . '/' . $timeline_theme_name . '.js');
-    drupal_add_css($timeline_mod_path . '/themes/' . $timeline_theme_name . '/' . $timeline_theme_name . '.css');
+  if ($timeline_theme != $timeline_mod_path . '/themes/ClassicTheme' && $timeline_theme != FALSE) {
+    drupal_add_js($timeline_theme . '/theme.js');
+    drupal_add_css($timeline_theme . '/theme.css');
   }
   drupal_add_js($timeline_mod_path . '/js/timeline.js');
   return TRUE;
 }
-

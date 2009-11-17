@@ -1,5 +1,5 @@
 <?php
-// $Id: timeline.views.inc,v 1.6.2.3.2.4 2009/07/24 02:15:32 xamanu Exp $
+// $Id: timeline.views.inc,v 1.6.2.3.2.6 2009/08/27 00:40:54 xamanu Exp $
 /**
  * @file
  * Views plugins definition for timeline.
@@ -20,6 +20,7 @@ function timeline_views_plugins() {
         'uses options' => TRUE,
         'type' => 'normal',
         'uses row plugin' => TRUE,
+        'even empty' => TRUE,
       ),
     ),
   );
@@ -141,11 +142,12 @@ function timeline_views_default_views() {
     ),
     'fields' => array(
       'title' => 'title',
+      'link' => 1,
       'start' => 'created',
-      'end' => 'created',
+      'end' => '',
       'advanced' => array(
-        'earliestStart' => 'created',
-        'latestEnd' => 'created',
+        'earliestStart' => '',
+        'latestEnd' => '',
       ),
     ),
     'bands' => array(

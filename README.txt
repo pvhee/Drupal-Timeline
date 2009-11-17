@@ -1,4 +1,4 @@
-// $Id: README.txt,v 1.7.2.1.2.2 2009/07/23 20:56:45 xamanu Exp $
+// $Id: README.txt,v 1.7.2.1.2.4 2009/11/10 16:22:23 xamanu Exp $
 
 DESCRIPTION
 -----------
@@ -11,7 +11,7 @@ capabilities for this widget are available on the SIMILE project site at:
 - http://code.google.com/p/simile-widgets/
 
 This module is a style plugin for the Views module that represents date 
-information of nodes on horizontal or vertical timeline display.
+information of nodes on horizontal timeline display.
 - http://drupal.org/project/views
 
 The timeline provides support for the Date module. CCK date fields can be used
@@ -25,6 +25,13 @@ the libraries module. (See INSTALL.txt for more information). By default, the
 SIMILE Timeline (and Ajax) libraries can be used from the SIMILE server.
 - http://drupal.org/project/libraries
 
+Further the module optionally can make use of the Imagefield, Imagecache, and 
+Taxonomy Image modules for icons on the events.
+- http://drupal.org/project/imagefield
+- http://drupal.org/project/imagecache
+- http://drupal.org/project/taxonomy_image
+
+
 A view is provided by default to get you started quickly: 
 * timeline_nodes: plots any nodes by their created date
 
@@ -34,17 +41,19 @@ continuous colored blocks (not dissimilar to Gantt chart entries).
 
 
 REQUIREMENTS
-------------
+-------------
 Please refer to the accompanying INSTALL.txt file.
 
 
 INSTALLATION
-------------
+-------------
 Please refer to the accompanying INSTALL.txt file.
 
 
-USAGE
------
+DOCUMENTATION
+-------------
+Complete documentation: http://drupal.org/node/561540
+
 After installing the module, do the following to create a new timeline view:
 
 1. Make sure the `views' and `views_ui' modules are installed and enabled.
@@ -71,23 +80,21 @@ After installing the module, do the following to create a new timeline view:
 CREDITS
 ---------------
 Version 2.x 
-Maintained by Felix Delattre [1] with kindly support of Jeff Miccolis (Development Seed) [2].
-The included Fancy Theme is based on work by Shawn Kindling [3]
+Largely rewritten and maintained by Felix Delattre [1]
 
 Version 1.x 
-Originally created by David Donohue [4] and further developed by Arto Bendiken [5] and 
+Originally created by David Donohue [3] and further developed by Arto Bendiken [4] and 
 Jeff Miccolis (Development Seed) [2].
 
 
-Both timelines are based on the Timeline developed by the SIMILE project [6]
+Both timelines are based on the Timeline developed by the SIMILE project [5]
 
 
 [1] Felix Delattre -> xamanu -> http://drupal.org/user/359937
 [2] Jeff Miccolis -> jmiccolis -> http://drupal.org/user/31731
-[3] Shawn Kindling -> http://keelingdesign.com/theming_a_simile_timeline
-[4] David Donohue -> dado -> http://drupal.org/user/16745
-[5] Art Bendiken -> arto -> http://drupal.org/user/26089
-[6] SIMILE project -> http://code.google.com/p/simile-widgets/
+[3] David Donohue -> dado -> http://drupal.org/user/16745
+[4] Art Bendiken -> arto -> http://drupal.org/user/26089
+[5] SIMILE project -> http://code.google.com/p/simile-widgets/
 
 
 TROUBLESHOOTING

@@ -1,21 +1,28 @@
-// $Id: CHANGELOG.txt,v 1.2.4.1 2009/07/23 18:21:23 xamanu Exp $
+// $Id: CHANGELOG.txt,v 1.2.4.2 2009/08/18 20:59:47 xamanu Exp $
 
-2009/07/23 - 6.x-2.0
+2009/08/18 - 6.x-2.0
 ----------------------
 - Partially rewritten
 - Updated to Simile Timeline 2.3.0
-- Extended visualization functions from Simile Timeline 2.x
+- Extended visualization functions from Simile Timeline 2.x (earliestStart/latestEnd)
 - Object based architecture for timeline settings and events
-- Better views 2 integration
-- Grouping with color coding.
+- Improved views 2 integration:
+  Supporting views arguments' (#358270, #368153)
+  and views' exposed filters (#330693)
+- Color coding by views' group by filter
+- Icons for events based on cck imagefields or taxonomy_image. 
+  Can be passed through an imagecache preset.
 - Respecting Drupal's js behaviors
 - Support for individual themes. Providing two new themes.
-- Improved support for Date module
+- Improved date handling. Extended date module support for all three date formats.
 - Depending on libraries module for local installation.
+- Theme variables in UI (Bubble_height, bubble_width)
+- Arbitrary/custom initial focus (#121377)
+- Translatable warning when Javascript is not activated
+- Improved admin settings page
+- Little debug feature. Export of the data array to facilitate remote debugging.
+- Dropping XML support
 - Dropped support for events module.
-- Supporting json only.
-- Avoiding js callback to certain url.
-- #121377 Arbitrary/custom initial focus.
 
 
 2008/07/05 - 5.x-1.0

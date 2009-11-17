@@ -1,13 +1,10 @@
 <?php
-// $Id: views_views_plugin_style_timeline.inc,v 1.1.2.2 2009/07/24 02:15:32 xamanu Exp $
+// $Id: views_views_plugin_style_timeline.inc,v 1.1.2.12 2009/10/08 12:20:57 xamanu Exp $
 
 /**
  * @file
  * Timeline views style plugin
  */
-
-define('TIMELINE_HORIZONTAL', 0);
-define('TIMELINE_VERTICAL', 1);
 
 /**
  * Extending the view_plugin_style class to provide a timeline view style.
@@ -20,7 +17,8 @@ class views_views_plugin_style_timeline extends views_plugin_style {
 
     $options = parent::option_definition();
     $options['display']['contains'] = array(
-      'type' => array('default' => TIMELINE_HORIZONTAL),
+      'width' => array('default' => variable_get('timeline_default_width', '100%')),
+      'height' => array('default' => variable_get('timeline_default_height', '400px')),
       'appearance' => array(
         'contains' => array(
           'theme' => array('default' => 'ClassicTheme'),
@@ -34,18 +32,21 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       'band1_unit' => array('default' => 'day'),
       'band2_unit' => array('default' => 'month'),
     );
-    $options['misc']['contains'] = array('controls' => array('default' => FALSE),);
+    $options['misc']['contains'] = array('controls' => array('default' => FALSE), );
     $options['fields']['contains'] = array(
       'title' => array('default' => ''),
+      'link' => TRUE,
       'start' => array('default' => ''),
       'end' => array('default' => ''),
       'advanced' => array(
         'contains' => array(
           'earliestStart' => '',
           'latestEnd' => '',
-         ),
-       ),
-    );    
+          'icon' => '',
+          'imagecache_icon' => '',
+        ),
+      ),
+    );
     return $options;
   }
 
@@ -54,13 +55,13 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    */
   function options_form(&$form, &$form_state) {
     parent::options_form($form, $form_state);
-    dsm($this->options);
     $form['colors'] = array(
       '#type' => 'fieldset',
       '#title' => t('Grouping colors'),
       '#collapsible' => TRUE, '#collapsed' => TRUE,
       '#description' => 'You can define the colors that are going to be used for the grouped events. Leave blank to use standard values',
     );
+
     $form['colors']['values'] = array(
       '#type' => 'textarea',
       '#title' => t('Color coding'),
@@ -69,12 +70,6 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     );
 
     $form['display'] = array('#type' => 'fieldset', '#title' => t('Display settings'), '#collapsible' => TRUE, '#collapsed' => FALSE);
-    $form['display']['type'] = array(
-      '#type' => 'radios',
-      '#title' => t('Timeline type'),
-      '#options' => array(TIMELINE_HORIZONTAL => t('Horizontal'), TIMELINE_VERTICAL => t('Vertical')),
-      '#default_value' => $this->options['display']['type'],
-    );
     $form['display']['width'] = array(
       '#type' => 'textfield',
       '#title' => t('Width'),
@@ -130,9 +125,14 @@ class views_views_plugin_style_timeline extends views_plugin_style {
       // Fields
       $field_names = array('' => '--');
       $date_field_names = array('' => '--');
+      $iconimage_field_names = array('' => '--');
       $supported_date_handlers = array(
         'views_handler_field_date',
         'date_handler_field_multiple',
+      );
+      $supported_iconimage_handlers = array(
+        'content_handler_field_multiple',
+        'views_handler_field_taxonomy_image',
       );
 
       foreach ($handlers as $field => $handler) {
@@ -143,16 +143,20 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         if (in_array(get_class($handler), $supported_date_handlers)) {
           $date_field_names[$field] = $field_names[$field];
         }
+        if (in_array(get_class($handler), $supported_iconimage_handlers)) {
+          if (get_class($handler) == 'views_handler_field_taxonomy_image') {
+            $iconimage_field_names[$field] = $field_names[$field];
+          }
+          elseif ($handler->content_field['widget']['module'] == 'imagefield') {
+            $iconimage_field_names[$field] = $field_names[$field];
+          }
+        }
       }
 
       $form['fields'] = array(
         '#type' => 'fieldset',
         '#title' => 'Field usage',
-        '#description' => t('Select the fields that contain the title,
-                            start time and end time of each item. If selected,
-                            the class field will be used to apply a class to
-                            each point. Remaining fields will be available as
-                            "content" of the item.'),
+        '#description' => t('Select the fields that contain the title, start time and end time of each item.'),
         '#collapsible' => TRUE,
         '#collapsed' => FALSE,
       );
@@ -163,6 +167,13 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#options' => $field_names,
         '#default_value' => $this->options['fields']['title'],
         '#required' => TRUE,
+      );
+
+      $form['fields']['link'] = array(
+        '#type' => 'checkbox',
+        '#title' => 'Link to node',
+        '#default_value' => $this->options['fields']['link'],
+        '#required' => FALSE,
       );
 
       $form['fields']['start'] = array(
@@ -184,7 +195,7 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#type' => 'fieldset',
         '#title' => t('Advanced visualization settings'),
         '#collapsible' => TRUE, '#collapsed' => TRUE,
-        '#description' => t('For more information on these fields visit !url', array('!url' => l(t('http://wiki.github.com/xamanu/Drupal-Timeline'), 'http://wiki.github.com/xamanu/Drupal-Timeline'))),
+        '#description' => t('For more information on these fields visit the <a href="@url">advanced documentation</a>', array('@url' => url('http://drupal.org/node/561738'))),
       );
       $form['fields']['advanced']['earliestStart'] = array(
         '#type' => 'select',
@@ -192,13 +203,30 @@ class views_views_plugin_style_timeline extends views_plugin_style {
         '#options' => $date_field_names,
         '#default_value' => $this->options['fields']['advanced']['earliestStart'],
       );
-
       $form['fields']['advanced']['latestEnd'] = array(
         '#type' => 'select',
         '#title' => t('Latest end'),
         '#options' => $date_field_names,
         '#default_value' => $this->options['fields']['advanced']['latestEnd'],
       );
+      $form['fields']['advanced']['icon'] = array(
+        '#type' => 'select',
+        '#title' => t('Icon'),
+        '#options' => $iconimage_field_names,
+        '#default_value' => $this->options['fields']['advanced']['icon'],
+      );
+      if (module_exists('imagecache')) {
+        $imagecache_presets = array('' => t('Orginal image size'));
+        foreach (imagecache_presets() as $preset) {
+          $imagecache_presets[$preset['presetname']] = $preset['presetname'];
+        }
+        $form['fields']['advanced']['imagecache_icon'] = array(
+          '#type' => 'select',
+          '#title' => t('Imagecache preset for Icon'),
+          '#options' => $imagecache_presets,
+          '#default_value' => $this->options['fields']['advanced']['imagecache_icon'],
+        );
+      }
     }
 
     // Band/interval settings
@@ -221,17 +249,17 @@ class views_views_plugin_style_timeline extends views_plugin_style {
     $form['bands']['focus'] = array(
       '#type' => 'select',
       '#title' => t('Initial date focus'),
-      '#options' => array('today' => t('The current date'), 'first' => t('First event in timeline'), 'last' => t('Last event in timeline'), 'custom' => t('Custom')),
+      '#options' => array('today' => t('The current date'), 'first' => t('First event in timeline'), 'last' => t('Last event in timeline'), 'middle' => t('Middle Event'), 'median' => t('Median'), 'custom' => t('Custom')),
       '#default_value' => $this->options['bands']['focus'],
       '#description' => t('Determines which event or date the timeline view should initially be centered on after it has loaded. Leave blank to use default value.'),
     );
     $form['bands']['focus_custom'] = array(
       '#type' => 'textfield',
-      '#title' => t('Custom inicial date focus'),
+      '#title' => t('Custom initial date focus'),
       '#default_value' => isset($this->options['bands']['focus_custom']) ? $this->options['bands']['focus_custom'] : '',
       '#process' => array('views_process_dependency'),
       '#dependency' => array('edit-style-options-bands-focus' => array('custom')),
-      '#description' => t('Please enter a custom inicial date to focus the timeline on.') .' '. t('Format: %time.', array('%time' => format_date(time(), 'custom', 'Y-m-d H:i:s O'))),
+      '#description' => t('Please enter a custom initial date to focus the timeline on.') .' '. t('Format: %time.', array('%time' => format_date(time(), 'custom', 'Y-m-d H:i:s O'))),
     );
 /* js is unstable within timeline. maybe next version the simile grup is going to fix this. - fd
     $form['limit'] = array('#type' => 'fieldset', '#title' => t('Limit timeline bands'), '#collapsible' => TRUE, '#collapsed' => TRUE);
@@ -286,7 +314,6 @@ class views_views_plugin_style_timeline extends views_plugin_style {
    * Data for the simile timeline is getting collected within the view
    */
   function render() {
-
     // Load only when neccessary
     module_load_include('inc', 'timeline', 'classes/Timeline.class');
     module_load_include('inc', 'timeline', 'classes/TimelineEvent.class');
@@ -296,8 +323,21 @@ class views_views_plugin_style_timeline extends views_plugin_style {
 
     // Build data for timeline
     $timeline = new Timeline($this->view, $sets);
-    $timeline->timelineToJS();
 
+    // Allow extension module to alter the data array.
+    drupal_alter('timeline_data', $timeline->data);
+
+    // Convert data to json and push them to drupal's js behaviors
+    $timeline->timeline_to_json();
+
+    // Print warning if no data is available
+    if (count($timeline->data['events']['events']) == 0) {
+      theme_timeline_nodata();
+    }
+
+    if (user_access('administer views') && variable_get('timeline_debug', FALSE)) {
+      $this->options['debug'] = $timeline->debug();
+    }
     // options that are used for template preprocessor
     $this->options['timeline'] = array(
       'class' => $this->view->name,

@@ -1,5 +1,5 @@
 <?php
-// $Id: Timeline.class.inc,v 1.1.2.1 2009/07/23 18:21:23 xamanu Exp $
+// $Id: Timeline.class.inc,v 1.1.2.14 2009/11/10 16:22:23 xamanu Exp $
 
 /**
  * @file
@@ -26,6 +26,7 @@ class Timeline {
   var $data;
   var $events;
   var $sets;
+  var $dateformat;
   var $color_id = 0;
 
   /**
@@ -33,13 +34,14 @@ class Timeline {
    *
    * @param $view
    */
-  function __construct($view, $sets) {
+  function __construct(&$view, $sets) {
     $this->view = $view;
     $this->sets = $sets;
+    $this->dateformat = 'iso8601';
 
     $this->data['events'] = $this->getEvents();
     $this->data['id'] = $this->view->name;
-    $this->data['orientation'] = $view->style_options['display']['type'];
+    $this->data['orientation'] = 0;
     $this->data['initial_focus'] = $this->getDefinedDateField($view->style_options['bands']['focus'], $view->style_options['bands']['focus_custom']);
     $this->data['timezone'] = 0; // missing
     $this->data['controls'] = FALSE; // missing
@@ -48,17 +50,22 @@ class Timeline {
     // startsOn ?!? ether.js on line 22 -fd
     //$this->data['timeline_start'] = $this->get_defined_date_field($view->style_options['limit']['start'], $view->style_options['limit']['custom_start']);
     //$this->data['timeline_end'] = $this->get_defined_date_field($view->style_options['limit']['end'], $view->style_options['limit']['custom_end']);
-    $this->data['theme'] = $view->style_options['display']['appearance']['theme'];
+    if ($view->style_options['display']['appearance']['theme'] == "ClassicTheme") {
+      $this->data['theme'] = "ClassicTheme"; 
+    }
+    else {
+      $this->data['theme'] = drupal_substr(strrchr($view->style_options['display']['appearance']['theme'], '/'), 1);
+    }
     $this->data['bubble_max_height'] = $view->style_options['display']['appearance']['bubble_height'];
     $this->data['bubble_width'] = $view->style_options['display']['appearance']['bubble_width'];
   }
 
-
-  /**
-   *
-   */
-  function timelineToJS() {
+  function timeline_to_json() {
     drupal_add_js(array('timeline' => array($this->data['id'] => $this->data)), 'setting');
+  }
+
+  function debug() {
+    return $this->data;
   }
 
 
@@ -69,6 +76,7 @@ class Timeline {
 
     $events = array();
     if (!empty($this->view->result)) {
+      $this->view->row_index = 0;
       foreach ($this->sets as $k => $set) {
         $css_selector = $this->generateCssSelector();
         $color = FALSE;
@@ -77,16 +85,17 @@ class Timeline {
         }
 
         foreach ($set as $row) {
-          $event = new TimelineEvent(&$this->view, &$row, $css_selector, $color);
+          $event = new TimelineEvent($this->view, $row, $this->dateformat, $css_selector, $color);
           if ($event->getData()) {
             $events[] = $event->getData();
           }
+          $this->view->row_index++;
         }
       }
     }
     return array(
-      'dateTimeFormat' => 'rfc2822',
       'events' => $events,
+      'dateTimeFormat' => $this->dateformat,
     );
   }
 
@@ -113,16 +122,31 @@ class Timeline {
    * Last should also check if the event has an "end" date
    */
   function getDefinedDateField($option, $options_field = '') {
+    // Make sure that if there is no result that a valid date (today) is getting served.
+    if ($option != 'today' && $option != 'custom' && count($this->data['events']['events']) == 0) {
+      $option = 'today';
+    }
     switch ($option) {
       case 'today':
-        return timeline_date_conversion(time(), 'timestamp');
+        return timeline_date_conversion(time(), 'timestamp', 'gregorian');
       case 'first':
-        return $this->data['events']['events'][0]['start'];
+        return timeline_date_conversion($this->data['events']['events'][0]['start'], 'iso8601', 'gregorian');
       case 'last':
-        return $this->data['events']['events'][count($this->data - 1)]['start'];
+        return timeline_date_conversion($this->data['events']['events'][count($this->data['events']['events']) - 1]['start'], 'iso8601', 'gregorian');
+      case 'middle':
+        $end = timeline_date_conversion($this->data['events']['events'][count($this->data['events']['events']) - 1]['start'], 'iso8601', 'timestamp');
+        $start = timeline_date_conversion($this->data['events']['events'][0]['start'], 'iso8601', 'timestamp');
+        $middle = ($start + $end) / 2;
+        return timeline_date_conversion($middle, 'timestamp', 'gregorian');
+      case 'median':
+        foreach ($this->data['events']['events'] as $date) {
+          $t[] = timeline_date_conversion($date['start'], 'iso8601', 'timestamp');
+        }
+        sort($t);
+        return timeline_date_conversion($t[round(count($t)/2)], 'timestamp', 'gregorian');
       case 'custom':
         if ($options_field != '') {
-          return timeline_date_conversion(strtotime($options_field), 'timestamp');
+          return timeline_date_conversion(strtotime($options_field), 'timestamp', 'gregorian');
         }
     }
     return FALSE;

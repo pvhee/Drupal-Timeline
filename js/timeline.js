@@ -1,7 +1,7 @@
 Drupal.timeline = {	
   timerID: null,
 
-  getTheme: function(theme, timeline_start, timeline_end, bubble_max_height, bubble_width) {
+  getTheme: function(theme, timeline_start, timeline_end, bubble_max_height, bubble_width, autoWidth) {
     var theme = Timeline[theme].create();
     theme.event.bubble.width = parseInt(bubble_width); // px
     theme.event.bubble.maxHeight = parseInt(bubble_max_height);
@@ -11,7 +11,7 @@ Drupal.timeline = {
 
   createWidget: function(args) {
   	args = eval(args);
-    var theme = Drupal.timeline.getTheme(args.theme, args.timeline_start, args.timeline_end, args.bubble_max_height, args.bubble_width);
+    var theme = Drupal.timeline.getTheme(args.theme, args.timeline_start, args.timeline_end, args.bubble_max_height, args.bubble_width, args.autoWidth);
     var bandInfos = [];
     var Sources = [];
 
@@ -64,14 +64,14 @@ Drupal.timeline = {
     }
    
    
-   var timeline = Timeline.create(document.getElementById(args.id), bandInfos);
+   var timeline = Timeline.create(document.getElementById(args.id), bandInfos, args.orientation);
 
    
    var url = document.location.href;
-   //timeline_sets = eval("(" + timeline_sets + ")");
-   $.each(args.events.events, function(i, v) {
+   Sources[0].loadJSON(args.events, url);
+/*   $.each(args.events.events, function(i, v) {
           Sources[i].loadJSON(args.events, url);
-   });
+   });*/
   }
 };
 
