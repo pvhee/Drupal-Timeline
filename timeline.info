@@ -3,5 +3,6 @@ name = Timeline
 description = Provides a draggable and scrollable timeline view. Requires the views module and the libraries module and makes use of the cck and date module if available.
 package = Views
 dependencies[] = views
+dependencies[] = ctools
 core = 6.x
 php = 5.2

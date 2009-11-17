@@ -38,6 +38,7 @@ function timeline_views_api() {
  * Implementation of hook_theme().
  */
 function timeline_theme() {
+  dsm(timeline_get_plugins());
   return array(
     'timeline_nodata' => array(),
     'timeline_bubble_title' => array(
@@ -71,8 +72,6 @@ function timeline_menu() {
 }
 
 function timeline_ctools_plugin_directory($module, $plugin) {
-	dsm($module);
-	dsm($plugin);
   if ($module == 'timeline') {
     return 'plugins/' . $plugin;
   }
@@ -83,9 +82,10 @@ function timeline_ctools_plugin_directory($module, $plugin) {
  * Implementation of hook_ctools_plugin_api().
  */
 function timeline_ctools_plugin_api($module, $api) {
-	dsm($module);
-  	dsm($api);
   if ($module == 'timeline' && $api == 'plugins') {
+    return array('version' => 1);
+  }
+  if ($module == 'timeline' && $api == 'themes') {
     return array('version' => 1);
   }
 }
@@ -202,6 +202,29 @@ function timeline_validate_library() {
   // no library found
   return FALSE;
 }
+
+/**
+ * Get all available plugins. Does not list hidden plugins.
+ *
+ * @return
+ *   An array where the keys are the plugin keys and the values
+ *   are the plugin info arrays as defined in hook_feeds_plugins().
+ */
+function timeline_get_plugins() {
+  ctools_include('plugins');
+  $plugins = ctools_get_plugins('timeline', 'plugins');
+
+  $result = array();
+  foreach ($plugins as $key => $info) {
+    if (!empty($info['hidden'])) {
+      continue;
+    }
+    $result[$key] = $info;
+  }
+  
+  return $result;
+}
+
 
 /**
  * Scans the themes directory to include more themes

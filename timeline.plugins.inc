@@ -13,19 +13,29 @@ function _timeline_timeline_plugins() {
   $path = drupal_get_path('module', 'timeline') .'/plugins';
 
   $info = array();
-  $info['DatePlugin'] = array(
+  $info['TimelinePlugin'] = array(
     'hidden' => TRUE,
     'handler' => array(
-      'class' => 'DatePlugin',
-      'file' => 'DatePlugin.inc',
+      'class' => 'TimelinePlugin',
+      'file' => 'TimelinePlugin.inc',
       'path' => $path,
     ),
   );
-  $info['StandardNodePlugin'] = array(
-    'hidden' => TRUE,
+  $info['TimelineNodePlugin'] = array(
+    'handler_name' => 'views_handler_field_date',
+    'hidden' => FALSE,
     'handler' => array(
-      'class' => 'StandardNodePlugin',
-      'file' => 'StandardNodePlugin.inc',
+      'class' => 'TimelineNodePlugin',
+      'file' => 'TimelineNodePlugin.inc',
+      'path' => $path,
+    ),
+  );
+  $info['TimelineDatePlugin'] = array(
+    'handler_name' => 'date_handler_field_multiple',
+    'hidden' => FALSE,
+    'handler' => array(
+      'class' => 'TimelineDatePlugin',
+      'file' => 'TimelineDatePlugin.inc',
       'path' => $path,
     ),
   );
